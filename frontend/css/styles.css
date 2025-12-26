@@ -1,0 +1,30 @@
+body {
+    background-image: url('../images/fondo.jpg'); /* si querés una imagen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+form {
+    background-color: rgba(255, 255, 255, 0.85); /* blanco semi-transparente */
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px); /* efecto blur detrás */
+}
+
+/* Inputs y etiquetas para mejor contraste */
+.form-control, label {
+    color: #111; /* texto oscuro sobre fondo claro */
+}
+
+/* Botón más visible */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    font-weight: bold;
+}
+
+
+
+

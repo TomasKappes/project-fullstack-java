@@ -1,0 +1,58 @@
+ body {
+      background-image: url('../images/fondoMenu.jpg'); /* si querés una imagen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #cccccc;
+    }
+    .card {
+      background-color: #212020;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+    .card-title {
+      color: #ff6f61; /* Color moderno para títulos */
+    }
+    .card-text {
+      color: #cccccc;
+    }
+    .container {
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+
+    img{
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .neon-blue-bg {
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    box-shadow: 0 0 15px #00bfff;
+  }
+
+  .neon-blue-btn {
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    border: none;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 10px #00bfff;
+  }
+
+  .neon-blue-btn:hover {
+    background: linear-gradient(90deg, #00bfff, #007bff);
+    box-shadow: 0 0 20px #00bfff, 0 0 40px #00bfff;
+    transform: scale(1.05);
+  }
+
+    
+
+    
+
+    
+
