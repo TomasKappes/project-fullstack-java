@@ -1,9 +1,9 @@
 package com.tomas.backend.repository;
 
-import com.tomas.backend.entity.Pedido;
+import com.tomas.backend.entity.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PedidoRepository extends JpaRepository<Pedido,Long> {
+public interface CategoriaRepository extends JpaRepository<Categoria,Long> {
 }
