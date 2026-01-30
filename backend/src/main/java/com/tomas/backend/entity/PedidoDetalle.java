@@ -2,6 +2,8 @@ package com.tomas.backend.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "pedido_detalle")
 public class PedidoDetalle {
@@ -18,7 +20,13 @@ public class PedidoDetalle {
     private Producto producto;
 
     @Column (nullable = false)
-    private int cantidad;
+    private BigDecimal cantidad;
+
+    @Column(nullable = false)
+    private BigDecimal precioUnitario;
+
+    @Column (nullable = false)
+    private BigDecimal subtotal;
 
     public Long getIdDetalle() {
         return idDetalle;
@@ -44,11 +52,11 @@ public class PedidoDetalle {
         this.producto = producto;
     }
 
-    public int getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -57,8 +65,19 @@ public class PedidoDetalle {
     }
 
 
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
 
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
 
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
 
-
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
 }

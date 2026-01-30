@@ -3,6 +3,7 @@ package com.tomas.backend.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos")
@@ -21,19 +22,22 @@ public class Producto {
     private BigDecimal precio;
 
     @Column(nullable = false)
-    private int stock;
+    private Integer stock;
 
     @ManyToOne
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 
+    @Column(nullable = false)
+    private Boolean activo = true;
 
-    public Long getId() {
+
+    public Long getIdProducto() {
         return idProducto;
     }
 
-    public void setId(Long idProducto) {
-        this.idProducto = this.idProducto;
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -78,5 +82,13 @@ public class Producto {
 
     public Producto() {
 
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }
