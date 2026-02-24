@@ -4,13 +4,13 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public class PedidoDetallesCreate {
+public class PedidoDetallesCreateDTO {
     @NotNull
     private Long productoId;
     @NotNull
-    private BigDecimal cantidad;
+    private Integer cantidad;
 
-    public PedidoDetallesCreate() {}
+    public PedidoDetallesCreateDTO() {}
 
 
     public Long getProductoId() {
@@ -21,11 +21,11 @@ public class PedidoDetallesCreate {
         this.productoId = productoId;
     }
 
-    public BigDecimal getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(BigDecimal cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 }

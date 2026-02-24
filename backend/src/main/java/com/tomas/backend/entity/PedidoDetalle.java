@@ -20,7 +20,7 @@ public class PedidoDetalle {
     private Producto producto;
 
     @Column (nullable = false)
-    private BigDecimal cantidad;
+    private Integer cantidad;
 
     @Column(nullable = false)
     private BigDecimal precioUnitario;
@@ -52,11 +52,11 @@ public class PedidoDetalle {
         this.producto = producto;
     }
 
-    public BigDecimal getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(BigDecimal cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 

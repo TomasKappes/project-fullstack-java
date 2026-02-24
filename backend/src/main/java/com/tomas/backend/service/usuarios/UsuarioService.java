@@ -1,33 +1,54 @@
 package com.tomas.backend.service.usuarios;
+import com.tomas.backend.DTOs.usuarios.UsuarioCreateDTO;
+import com.tomas.backend.DTOs.usuarios.UsuarioRequestDTO;
+import com.tomas.backend.DTOs.usuarios.UsuarioResponseDTO;
+import com.tomas.backend.DTOs.usuarios.UsuarioUpdateDTO;
 import com.tomas.backend.entity.Usuario;
+import com.tomas.backend.mappers.UsuarioMapper;
 import com.tomas.backend.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioMapper usuarioMapper;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
 
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioMapper = usuarioMapper;
     }
 
-    public Usuario crearUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioResponseDTO crearUsuario(UsuarioCreateDTO usuarioCreateDTO) {
+        Usuario usuario = usuarioMapper.toEntity(usuarioCreateDTO);
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+        return usuarioMapper.toResponseDTO(usuarioGuardado);
     }
 
-    public Optional<Usuario> obtenerUsuario(Long idUsuario) {
-     return usuarioRepository.findById(idUsuario);
+    public UsuarioResponseDTO obtenerUsuario(Long idUsuario) {
+     Usuario optUsuario = usuarioRepository.findById(idUsuario)
+             .orElseThrow( () ->new RuntimeException("Usuario no encontrado"));
+     return usuarioMapper.toResponseDTO(optUsuario);
     }
 
-    public List<Usuario> listaUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDTO> listaUsuarios() {
+       List<UsuarioResponseDTO> listaUsuarios = new ArrayList<>();
+       for (Usuario usuario : usuarioRepository.findAll()) {
+           listaUsuarios.add(usuarioMapper.toResponseDTO(usuario));
+       }
+
+       return listaUsuarios;
     }
 
-    public Optional<Usuario> obtenerUsuarioPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
+    public UsuarioResponseDTO obtenerUsuarioPorEmail(String email) {
+        Usuario optUsuario =  usuarioRepository.findByEmail(email)
+                .orElseThrow( () ->new RuntimeException("Usuario con este email no encontrado"));
+
+        return usuarioMapper.toResponseDTO(optUsuario);
     }
 
     public void eliminarUsuario(Long idUsuario) {
@@ -37,44 +58,43 @@ public class UsuarioService {
         usuarioRepository.deleteById(idUsuario);
     }
 
-    public Usuario actualizarUsuario(Long idUsuario, Usuario usuario) {
-        Usuario usuarioExistente = obtenerUsuario(idUsuario)
+    public UsuarioResponseDTO actualizarUsuario(Long idUsuario, UsuarioUpdateDTO usuarioUpdateDTO) {
+        Usuario optUsuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        usuarioExistente.setEmail(usuario.getEmail());
-        usuarioExistente.setNombre(usuario.getNombre());
-        usuarioExistente.setPassword(usuario.getPassword());
+        optUsuario.setEmail(usuarioUpdateDTO.getEmail());
+        optUsuario.setNombre(usuarioUpdateDTO.getNombre());
+        optUsuario.setPassword(usuarioUpdateDTO.getPassword());
 
-        return usuarioRepository.save(usuarioExistente);
+        Usuario usuarioActualizado = usuarioRepository.save(optUsuario);
+
+       return usuarioMapper.toResponseDTO(usuarioActualizado);
     }
 
 
-    public Usuario loginUsuario(String email, String password) {
+    public UsuarioResponseDTO loginUsuario(UsuarioRequestDTO usuarioRequestDTO) {
 
-            Optional<Usuario> usuarioOpt = obtenerUsuarioPorEmail(email);
+        Usuario optUsuario = usuarioRepository.findByEmail(usuarioRequestDTO.getEmail())
+                .orElseThrow( () ->new RuntimeException("No existe un usuario registrado con este email"));
 
-            if (usuarioOpt.isEmpty()) {
-                throw new RuntimeException("Usuario no encontrado");
-            }
+        if (!optUsuario.getPassword().equals(usuarioRequestDTO.getPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
 
-            Usuario usuario = usuarioOpt.get();
 
-            if (!usuario.getPassword().equals(password)) {
-                throw new RuntimeException("Contraseña incorrecta");
-            }
+        return usuarioMapper.toResponseDTO(optUsuario);
 
-            return usuario;
     }
 
-    public Usuario registrarUsuario(Usuario usuario) {
+    public UsuarioResponseDTO registrarUsuario(UsuarioCreateDTO usuarioCreateDTO) {
 
-        Optional<Usuario> usuarioOpt = obtenerUsuarioPorEmail(usuario.getEmail());
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(usuarioCreateDTO.getEmail());
 
         if (usuarioOpt.isPresent()) {
             throw new RuntimeException("Este Usuario ya existe");
         }
 
-        return crearUsuario(usuario);
+        return crearUsuario(usuarioCreateDTO);
     }
 
 }

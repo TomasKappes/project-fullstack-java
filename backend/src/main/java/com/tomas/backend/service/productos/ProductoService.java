@@ -1,35 +1,44 @@
 package com.tomas.backend.service.productos;
+import com.tomas.backend.DTOs.categoria.CategoriaRequestDTO;
+import com.tomas.backend.DTOs.productos.ProductoCreateDTO;
+import com.tomas.backend.DTOs.productos.ProductoResponseDTO;
+import com.tomas.backend.DTOs.productos.ProductoUpdateDTO;
 import com.tomas.backend.entity.Categoria;
 import com.tomas.backend.entity.Producto;
+import com.tomas.backend.mappers.ProductoMapper;
 import com.tomas.backend.repository.CategoriaRepository;
 import com.tomas.backend.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProductoService {
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final ProductoMapper productoMapper;
 
 
-    public ProductoService(ProductoRepository productoRepository, CategoriaRepository categoriaRepository) {
+    public ProductoService(ProductoRepository productoRepository, CategoriaRepository categoriaRepository, ProductoMapper productoMapper) {
         this.productoRepository = productoRepository;
         this.categoriaRepository = categoriaRepository;
+        this.productoMapper = productoMapper;
     }
 
-    public Producto crearProducto(Producto producto) {
-        if (producto.getCategoria() == null || producto.getPrecio() == null || producto.getNombre() == null) {
-            throw new RuntimeException("Error al crear producto, faltan campos obligatorios a rellenar");
-        }
-        if (producto.getPrecio().compareTo(BigDecimal.ZERO)<=0){
-            throw new RuntimeException("Error al crear producto, el precio debe ser mayor que 0");
-        }
-        return productoRepository.save(producto);
+    public ProductoResponseDTO crearProducto(ProductoCreateDTO productoCreateDTO) {
+
+        Categoria optCategoria  = categoriaRepository.findById(productoCreateDTO.getCategoriaId())
+                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+
+         Producto producto =  productoMapper.toEntity(productoCreateDTO);
+         producto.setCategoria(optCategoria);
+         Producto productoGuardado = productoRepository.save(producto);
+         return productoMapper.toResponseDTO(productoGuardado);
     }
 
-    public Producto obtenerProducto(Long idProducto){
+    public ProductoResponseDTO obtenerProducto(Long idProducto){
         Producto optProducto= productoRepository.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("No existe el producto con el id: "+idProducto));
 
@@ -37,59 +46,71 @@ public class ProductoService {
             throw new RuntimeException("El producto se encuentra desactivado");
         }
 
-        return optProducto;
+        return productoMapper.toResponseDTO(optProducto);
     }
 
-    public List<Producto> listarProductos() {
-        return productoRepository.findAll();
+    public List<ProductoResponseDTO> listarProductos() {
+        List<ProductoResponseDTO> productosDTO = new ArrayList<>();
+
+        for (Producto producto : productoRepository.findAll()) {
+            productosDTO.add(productoMapper.toResponseDTO(producto));
+        }
+        return productosDTO;
     }
 
-    public Producto actualizarProducto(Producto producto, Long idProducto) {
+    public ProductoResponseDTO actualizarProducto(ProductoUpdateDTO productoUpdateDTO, Long idProducto) {
 
         Producto optProducto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new RuntimeException("No existe el producto con el id: " + idProducto));
 
-        if (producto.getCategoria() == null || producto.getPrecio() == null || producto.getNombre() == null) {
-            throw new RuntimeException("Error al actualizar producto,faltan campos obligatorios a rellenar");
+        Categoria categoria = null;
+
+        if (productoUpdateDTO.getCategoriaId() != null) {
+            categoria = categoriaRepository.findById(productoUpdateDTO.getCategoriaId())
+                    .orElseThrow(() -> new RuntimeException("La categoria que se le dio a este producto no existe"));
+
         }
 
-        if (producto.getPrecio().compareTo(BigDecimal.ZERO)<=0){
-            throw new RuntimeException("Error al actualizar producto, el precio debe ser mayor que 0");
-        }
 
-            optProducto.setNombre(producto.getNombre());
-            optProducto.setDescripcion(producto.getDescripcion());
-            optProducto.setPrecio(producto.getPrecio());
-            optProducto.setStock(producto.getStock());
-            optProducto.setCategoria(producto.getCategoria());
-           return productoRepository.save(optProducto);
+        productoMapper.toUpdateEntity(productoUpdateDTO,optProducto,categoria);
+        productoRepository.save(optProducto);
+        return productoMapper.toResponseDTO(optProducto);
 
     }
 
 
-   public List<Producto> productosPorCategoria( Long idCategoria) {
+   public List<ProductoResponseDTO> productosPorCategoria( Long idCategoria) {
         Categoria optCategoria = categoriaRepository.findById(idCategoria)
                 .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
-        return productoRepository.findByCategoria(optCategoria);
+
+        List<ProductoResponseDTO> productosDTO = new ArrayList<>();
+
+        for (Producto producto : productoRepository.findByCategoria(optCategoria)) {
+            productosDTO.add(productoMapper.toResponseDTO(producto));
+        }
+
+        return productosDTO;
    }
 
-   public Producto desactivarProducto(Long idProducto) {
+   public ProductoResponseDTO desactivarProducto(Long idProducto) {
         Producto optProducto = productoRepository.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
         optProducto.setActivo(false);
-        return productoRepository.save(optProducto);
+        productoRepository.save(optProducto);
+        return productoMapper.toResponseDTO(optProducto);
    }
 
-    public Producto activarProducto(Long idProducto) {
+    public ProductoResponseDTO activarProducto(Long idProducto) {
         Producto optProducto = productoRepository.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
         optProducto.setActivo(true);
-        return productoRepository.save(optProducto);
+       productoRepository.save(optProducto);
+      return  productoMapper.toResponseDTO(optProducto);
     }
 
-    public Producto aumentarStock(Long idProducto, Integer aumentoStock) {
+    public void aumentarStock(Long idProducto, Integer aumentoStock) {
         Producto optProducto = productoRepository.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
@@ -101,10 +122,10 @@ public class ProductoService {
             throw new RuntimeException("Error al aumentar stock, el valor de aumento debe ser mayor que 0");
         }
         optProducto.setStock(optProducto.getStock() + aumentoStock);
-        return productoRepository.save(optProducto);
+        productoRepository.save(optProducto);
     }
 
-    public Producto disminuirStock(Long idProducto, Integer disminuirStock) {
+    public void disminuirStock(Long idProducto, Integer disminuirStock) {
         Producto optProducto = productoRepository.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
@@ -121,7 +142,7 @@ public class ProductoService {
         }
 
         optProducto.setStock(optProducto.getStock() - disminuirStock);
-        return productoRepository.save(optProducto);
+        productoRepository.save(optProducto);
     }
 
     public boolean estaActivo(Long idProducto) {

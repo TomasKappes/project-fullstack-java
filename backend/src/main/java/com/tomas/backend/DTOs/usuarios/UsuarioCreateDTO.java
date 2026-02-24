@@ -1,4 +1,4 @@
-package com.tomas.backend.dto.usuarios;
+package com.tomas.backend.DTOs.usuarios;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

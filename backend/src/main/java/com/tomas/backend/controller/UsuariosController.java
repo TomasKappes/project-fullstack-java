@@ -1,10 +1,12 @@
 package com.tomas.backend.controller;
-import com.tomas.backend.entity.Usuario;
+import com.tomas.backend.DTOs.usuarios.UsuarioCreateDTO;
+import com.tomas.backend.DTOs.usuarios.UsuarioRequestDTO;
+import com.tomas.backend.DTOs.usuarios.UsuarioResponseDTO;
+import com.tomas.backend.DTOs.usuarios.UsuarioUpdateDTO;
 import com.tomas.backend.service.usuarios.UsuarioService;
-import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -16,37 +18,34 @@ public class UsuariosController {
         this.usuarioService = usuarioService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Long id) {
-        return usuarioService.obtenerUsuario(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/{idUsuario}")
+    public UsuarioResponseDTO findById(@PathVariable Long idUsuario) {
+        return usuarioService.obtenerUsuario(idUsuario);
     }
 
     @GetMapping
-    public List<Usuario> findAll() {
+    public List<UsuarioResponseDTO> findAll() {
         return usuarioService.listaUsuarios();
     }
 
     @PostMapping("/login")
-    public Usuario login(@RequestBody Usuario usuario) {
-        return usuarioService.loginUsuario(usuario.getEmail(), usuario.getPassword());
+    public UsuarioResponseDTO login(@RequestBody @Valid UsuarioRequestDTO usuarioRequestDTO) {
+        return usuarioService.loginUsuario(usuarioRequestDTO);
     }
 
     @PostMapping("/register")
-    public Usuario register(@RequestBody Usuario usuario) {
-        return usuarioService.registrarUsuario(usuario);
+    public UsuarioResponseDTO register(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) {
+        return usuarioService.registrarUsuario(usuarioCreateDTO);
     }
 
-    @PutMapping("/{id}")
-    public Usuario update(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return usuarioService.actualizarUsuario(id, usuario);
+    @PutMapping("Update/{idUsuario}")
+    public UsuarioResponseDTO update(@PathVariable Long idUsuario, @RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) {
+        return usuarioService.actualizarUsuario(idUsuario, usuarioUpdateDTO);
     }
 
-    @DeleteMapping("/{idUsuario}")
-    public String delete(@PathVariable Long idUsuario) {
+    @DeleteMapping("Delete/{idUsuario}")
+    public void delete(@PathVariable Long idUsuario) {
      usuarioService.eliminarUsuario(idUsuario);
-     return "Usuario eliminado";
     }
 
 

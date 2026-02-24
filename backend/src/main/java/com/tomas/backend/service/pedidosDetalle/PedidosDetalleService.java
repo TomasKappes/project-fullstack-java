@@ -1,46 +1,33 @@
 package com.tomas.backend.service.pedidosDetalle;
+import com.tomas.backend.DTOs.pedidos_detalles.PedidoDetallesCreateDTO;
+import com.tomas.backend.DTOs.pedidos_detalles.PedidoDetallesResponseDTO;
 import com.tomas.backend.entity.PedidoDetalle;
+import com.tomas.backend.mappers.PedidoDetalleMapper;
 import com.tomas.backend.repository.PedidoDetalleRepository;
+import com.tomas.backend.repository.PedidoRepository;
+import com.tomas.backend.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
-
-
 
 @Service
 public class PedidosDetalleService {
     private final PedidoDetalleRepository pedidoDetalleRepository;
+    private final ProductoRepository productoRepository;
+    private final PedidoDetalleMapper pedidoDetalleMapper;
 
-    public PedidosDetalleService(PedidoDetalleRepository pedidoDetalleRepository) {
+    public PedidosDetalleService(PedidoDetalleRepository pedidoDetalleRepository, ProductoRepository productoRepository, PedidoDetalleMapper pedidoDetalleMapper) {
         this.pedidoDetalleRepository = pedidoDetalleRepository;
+        this.productoRepository = productoRepository;
+        this.pedidoDetalleMapper = pedidoDetalleMapper;
     }
 
-    public PedidoDetalle crear(PedidoDetalle pedidoDetalle){
-        return pedidoDetalleRepository.save(pedidoDetalle);
-    }
 
-    public PedidoDetalle obtenerPedidoDetalle(Long idPedidoDetalle){
+    public PedidoDetallesResponseDTO obtenerPedidoDetalle(Long idPedidoDetalle){
         PedidoDetalle optPedidoDetalle = pedidoDetalleRepository.findById(idPedidoDetalle)
                 .orElseThrow(()->new RuntimeException("Pedido detalle no encontrado"));
-        return optPedidoDetalle;
+        return pedidoDetalleMapper.toResponseDTO(optPedidoDetalle);
     }
 
 
-    public PedidoDetalle actualizar(PedidoDetalle pedidoDetalle,Long idPedidoDetalle){
-        PedidoDetalle optPedidoDetalle = pedidoDetalleRepository.findById(idPedidoDetalle)
-                .orElseThrow(()->new RuntimeException("Pedido detalle no encontrado"));
-
-
-        optPedidoDetalle.setPrecioUnitario(pedidoDetalle.getPrecioUnitario());
-        optPedidoDetalle.setCantidad(pedidoDetalle.getCantidad());
-        optPedidoDetalle.setSubtotal(pedidoDetalle.getSubtotal());
-
-        return pedidoDetalleRepository.save(optPedidoDetalle);
-    }
-
-    public void eliminarPedidoDetalle(Long idPedidoDetalle){
-        PedidoDetalle optPedidoDetalle = pedidoDetalleRepository.findById(idPedidoDetalle)
-                .orElseThrow(()->new RuntimeException("Pedido detalle no encontrados"));
-        pedidoDetalleRepository.deleteById(idPedidoDetalle);
-    }
 
 
 

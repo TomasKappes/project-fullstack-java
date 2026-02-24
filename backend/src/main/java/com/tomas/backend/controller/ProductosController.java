@@ -1,4 +1,8 @@
 package com.tomas.backend.controller;
+import com.tomas.backend.DTOs.productos.ProductoCreateDTO;
+import com.tomas.backend.DTOs.productos.ProductoRequestDTO;
+import com.tomas.backend.DTOs.productos.ProductoResponseDTO;
+import com.tomas.backend.DTOs.productos.ProductoUpdateDTO;
 import com.tomas.backend.entity.Producto;
 import com.tomas.backend.service.productos.ProductoService;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +19,17 @@ public class ProductosController {
     }
 
     @GetMapping
-    public List<Producto> getProductos() {
+    public List<ProductoResponseDTO> getProductos() {
         return productoService.listarProductos();
     }
 
     @GetMapping("/id/{idProducto}")
-    public Producto getProducto(@PathVariable Long idProducto) {
+    public ProductoResponseDTO getProducto(@PathVariable Long idProducto) {
         return productoService.obtenerProducto(idProducto);
     }
 
     @GetMapping("/categoria/{idCategoria}")
-    public List<Producto> getProductosPorCategoria(@PathVariable Long idCategoria) {
+    public List<ProductoResponseDTO> getProductosPorCategoria(@PathVariable Long idCategoria) {
         return productoService.productosPorCategoria(idCategoria);
     }
 
@@ -35,33 +39,33 @@ public class ProductosController {
     }
 
     @PostMapping("/crear")
-    public Producto crearProducto(@RequestBody Producto producto) {
-        return productoService.crearProducto(producto);
+    public ProductoResponseDTO crearProducto(@RequestBody ProductoCreateDTO productoCreateDTO) {
+        return productoService.crearProducto(productoCreateDTO);
     }
 
     @PostMapping("/actualizar/{idProducto}")
-    public Producto actualizarProducto(@RequestBody Producto producto,@PathVariable Long idProducto) {
-        return productoService.actualizarProducto(producto,idProducto);
+    public ProductoResponseDTO actualizarProducto(@RequestBody ProductoUpdateDTO productoUpdateDTO, @PathVariable Long idProducto) {
+        return productoService.actualizarProducto(productoUpdateDTO,idProducto);
     }
 
     @PostMapping("/activar/{idProducto}")
-    public Producto activarProducto(@PathVariable Long idProducto) {
+    public ProductoResponseDTO activarProducto(@PathVariable Long idProducto) {
         return productoService.activarProducto(idProducto);
     }
 
     @PostMapping("/desactivar/{idProducto}")
-    public Producto desactivarProducto(@PathVariable Long idProducto) {
+    public ProductoResponseDTO desactivarProducto(@PathVariable Long idProducto) {
         return productoService.desactivarProducto(idProducto);
     }
 
     @PostMapping("/Stock/aumento/{idProducto}/{cantidad}")
-    public Producto aumentarStockProducto(@PathVariable Long idProducto,@PathVariable Integer cantidad) {
-        return productoService.aumentarStock(idProducto,cantidad);
+    public void aumentarStockProducto(@PathVariable Long idProducto,@PathVariable Integer cantidad) {
+        productoService.aumentarStock(idProducto,cantidad);
     }
 
     @PostMapping("/Stock/disminuir/{idProducto}/{cantidad}")
-    public Producto disminuirStockProducto(@PathVariable Long idProducto,@PathVariable Integer cantidad) {
-        return productoService.disminuirStock(idProducto,cantidad);
+    public void disminuirStockProducto(@PathVariable Long idProducto,@PathVariable Integer cantidad) {
+       productoService.disminuirStock(idProducto,cantidad);
     }
 
 }

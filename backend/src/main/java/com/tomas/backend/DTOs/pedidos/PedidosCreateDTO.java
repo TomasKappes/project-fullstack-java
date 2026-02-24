@@ -1,23 +1,23 @@
 package com.tomas.backend.DTOs.pedidos;
 
-import com.tomas.backend.entity.PedidoDetalle;
+import com.tomas.backend.DTOs.pedidos_detalles.PedidoDetallesCreateDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
-public class PedidosCreate {
+public class PedidosCreateDTO {
     @NotBlank
-    private List<PedidoDetalle> pedidosDetalle;
+    private List<PedidoDetallesCreateDTO> pedidosDetalle;
     @NotNull
     private Long usuarioId;
-    public PedidosCreate() {
+    public PedidosCreateDTO() {
     }
 
-    public List<PedidoDetalle> getPedidosDetalle() {
+    public List<PedidoDetallesCreateDTO> getPedidosDetalle() {
         return pedidosDetalle;
     }
 
-    public void setPedidosDetalle(List<PedidoDetalle> pedidosDetalle) {
+    public void setPedidosDetalle(List<PedidoDetallesCreateDTO> pedidosDetalle) {
         this.pedidosDetalle = pedidosDetalle;
     }
 
