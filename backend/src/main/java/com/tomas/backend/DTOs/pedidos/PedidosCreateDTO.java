@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public class PedidosCreateDTO {
-    @NotBlank
+
     private List<PedidoDetallesCreateDTO> pedidosDetalle;
     @NotNull
     private Long usuarioId;

@@ -7,6 +7,9 @@ import com.tomas.backend.entity.PedidoDetalle;
 import com.tomas.backend.entity.Producto;
 import com.tomas.backend.entity.Usuario;
 import com.tomas.backend.enums.EstadoPedido;
+import com.tomas.backend.excetions.custom.BadRequestException;
+import com.tomas.backend.excetions.custom.ConflictException;
+import com.tomas.backend.excetions.custom.ResourceNotFoundException;
 import com.tomas.backend.mappers.PedidoDetalleMapper;
 import com.tomas.backend.mappers.PedidoMapper;
 import com.tomas.backend.repository.PedidoRepository;
@@ -24,26 +27,37 @@ public class PedidoService {
     private final ProductoRepository productoRepository;
     private final PedidoMapper pedidoMapper;
     private final PedidoDetalleMapper pedidoDetalleMapper;
+    private final CompatibilidadService compatibilidadService;
+
 
     public PedidoService(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository,
-                         ProductoRepository productoRepository, PedidoMapper pedidoMapper, PedidoDetalleMapper pedidoDetalleMapper) {
+                         ProductoRepository productoRepository, PedidoMapper pedidoMapper, PedidoDetalleMapper pedidoDetalleMapper, CompatibilidadService compatibilidadService) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioRepository = usuarioRepository;
         this.productoRepository = productoRepository;
         this.pedidoMapper = pedidoMapper;
         this.pedidoDetalleMapper = pedidoDetalleMapper;
-
+        this.compatibilidadService = compatibilidadService;
     }
+
     //Metodo para crear pedido en la BD
     @Transactional
     public PedidosResponseDTO crear(PedidosCreateDTO pedidoCreate) {
-
 
         Pedido pedido = new Pedido();
 
         Long idUsuario = pedidoCreate.getUsuarioId();
         Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no Valido"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no Valido"));
+
+        if (pedidoCreate.getPedidosDetalle().size()<3) {
+            throw new BadRequestException("El pedido debe tener almenos 3 componentes.");
+        }
+
+
+        compatibilidadService.validarDetalle(pedidoCreate.getPedidosDetalle());
+
+
 
         BigDecimal total = BigDecimal.ZERO;
 
@@ -54,16 +68,16 @@ public class PedidoService {
 
             Long idProducto = detalleDTO.getProductoId();
             Producto producto = productoRepository.findById(idProducto)
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
 
 
 
             if (producto.getStock() == 0){
-                throw new RuntimeException("Producto sin stock");
+                throw new ConflictException("Producto sin stock");
 
             }
             if (producto.getStock() < detalle.getCantidad()){
-                throw new RuntimeException("Stock insuficiente para la cantidad seleccionada");
+                throw new ConflictException("Stock insuficiente para la cantidad seleccionada");
             }
 
             detalle.setProducto(producto);
@@ -96,7 +110,7 @@ public class PedidoService {
     //Metodo para obtener pedido por id
     public PedidosResponseDTO obtenerPedido(Long idPedido) {
         Pedido optPedido = pedidoRepository.findById(idPedido)
-                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado"));
 
         return pedidoMapper.toResponseDTO(optPedido);
 
@@ -108,14 +122,23 @@ public class PedidoService {
     public PedidosResponseDTO confirmarPedido(Long  idPedido ) {
 
         Pedido optPedido = pedidoRepository.findById(idPedido).
-                orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+                orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado"));
 
 
         if (optPedido.getEstado() == EstadoPedido.CONFIRMADO) {
-            throw new RuntimeException("Este pedido ya fue confirmado");
+            throw new ConflictException("Este pedido ya fue confirmado");
         }
 
         optPedido.setEstado(EstadoPedido.CONFIRMADO);
+
+        for (PedidoDetalle detalle : optPedido.getPedidoDetalles()) {
+            Producto producto = detalle.getProducto();
+            Integer stock = producto.getStock();
+            Integer cantidad = detalle.getCantidad();
+            Integer nuevoStock = stock - cantidad;
+            producto.setStock(nuevoStock);
+        }
+
 
         return pedidoMapper.toResponseDTO(optPedido);
 
@@ -127,10 +150,10 @@ public class PedidoService {
     public PedidosResponseDTO reCrearPedido(Long idPedido, PedidosCreateDTO pedidoCreate) {
 
         Pedido optPedido = pedidoRepository.findById(idPedido)
-                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado"));
 
         if (optPedido.getEstado() == EstadoPedido.CONFIRMADO) {
-            throw new RuntimeException("Este pedido no puede modifcarse debido a que ya fue confirmado");
+            throw new ConflictException(    "Este pedido no puede modifcarse debido a que ya fue confirmado");
         }
 
         optPedido.setEstado(EstadoPedido.CANCELADO);

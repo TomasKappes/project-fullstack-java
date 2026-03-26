@@ -4,8 +4,13 @@ import com.tomas.backend.DTOs.usuarios.UsuarioRequestDTO;
 import com.tomas.backend.DTOs.usuarios.UsuarioResponseDTO;
 import com.tomas.backend.DTOs.usuarios.UsuarioUpdateDTO;
 import com.tomas.backend.entity.Usuario;
+import com.tomas.backend.excetions.custom.ConflictException;
+import com.tomas.backend.excetions.custom.InvalidCredentialsException;
+import com.tomas.backend.excetions.custom.ResourceNotFoundException;
 import com.tomas.backend.mappers.UsuarioMapper;
 import com.tomas.backend.repository.UsuarioRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,22 +21,26 @@ import java.util.Optional;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UsuarioResponseDTO crearUsuario(UsuarioCreateDTO usuarioCreateDTO) {
         Usuario usuario = usuarioMapper.toEntity(usuarioCreateDTO);
+        String encodedPassword = passwordEncoder.encode(usuario.getPassword());
+        usuario.setPassword(encodedPassword);
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
         return usuarioMapper.toResponseDTO(usuarioGuardado);
     }
 
     public UsuarioResponseDTO obtenerUsuario(Long idUsuario) {
      Usuario optUsuario = usuarioRepository.findById(idUsuario)
-             .orElseThrow( () ->new RuntimeException("Usuario no encontrado"));
+             .orElseThrow( () ->new ResourceNotFoundException("Usuario no encontrado"));
      return usuarioMapper.toResponseDTO(optUsuario);
     }
 
@@ -46,21 +55,21 @@ public class UsuarioService {
 
     public UsuarioResponseDTO obtenerUsuarioPorEmail(String email) {
         Usuario optUsuario =  usuarioRepository.findByEmail(email)
-                .orElseThrow( () ->new RuntimeException("Usuario con este email no encontrado"));
+                .orElseThrow( () ->new ResourceNotFoundException("Usuario con este email no existe"));
 
         return usuarioMapper.toResponseDTO(optUsuario);
     }
 
     public void eliminarUsuario(Long idUsuario) {
         if (!usuarioRepository.existsById(idUsuario)) {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new ResourceNotFoundException("Usuario no encontrado");
         }
         usuarioRepository.deleteById(idUsuario);
     }
 
     public UsuarioResponseDTO actualizarUsuario(Long idUsuario, UsuarioUpdateDTO usuarioUpdateDTO) {
         Usuario optUsuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
         optUsuario.setEmail(usuarioUpdateDTO.getEmail());
         optUsuario.setNombre(usuarioUpdateDTO.getNombre());
@@ -75,10 +84,13 @@ public class UsuarioService {
     public UsuarioResponseDTO loginUsuario(UsuarioRequestDTO usuarioRequestDTO) {
 
         Usuario optUsuario = usuarioRepository.findByEmail(usuarioRequestDTO.getEmail())
-                .orElseThrow( () ->new RuntimeException("No existe un usuario registrado con este email"));
+                .orElseThrow( () ->new InvalidCredentialsException("Credenciales invalidas"));
 
-        if (!optUsuario.getPassword().equals(usuarioRequestDTO.getPassword())) {
-            throw new RuntimeException("Contraseña incorrecta");
+        if (!passwordEncoder.matches(
+                usuarioRequestDTO.getPassword(),
+                optUsuario.getPassword()
+        )) {
+            throw new InvalidCredentialsException("Credenciales inválidas");
         }
 
 
@@ -91,7 +103,7 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(usuarioCreateDTO.getEmail());
 
         if (usuarioOpt.isPresent()) {
-            throw new RuntimeException("Este Usuario ya existe");
+            throw new ConflictException("Este Usuario ya existe");
         }
 
         return crearUsuario(usuarioCreateDTO);

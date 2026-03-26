@@ -2,11 +2,11 @@ package com.tomas.backend.excetions.custom;
 
 import org.springframework.http.HttpStatus;
 
-public abstract class ApiExepcion extends RuntimeException{
+public abstract class ApiException extends RuntimeException{
 
     private final HttpStatus status;
 
-    public ApiExepcion(String message,HttpStatus status){
+    public ApiException(String message, HttpStatus status){
         super(message);
         this.status=status;
     }

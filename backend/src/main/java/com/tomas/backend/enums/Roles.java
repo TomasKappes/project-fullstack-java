@@ -1,4 +1,6 @@
 package com.tomas.backend.enums;
 
-public class Roles {
+public enum Roles {
+    ADMIN,
+    USER,
 }

@@ -28,18 +28,9 @@ public class UsuariosController {
         return usuarioService.listaUsuarios();
     }
 
-    @PostMapping("/login")
-    public UsuarioResponseDTO login(@RequestBody @Valid UsuarioRequestDTO usuarioRequestDTO) {
-        return usuarioService.loginUsuario(usuarioRequestDTO);
-    }
-
-    @PostMapping("/register")
-    public UsuarioResponseDTO register(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) {
-        return usuarioService.registrarUsuario(usuarioCreateDTO);
-    }
 
     @PutMapping("Update/{idUsuario}")
-    public UsuarioResponseDTO update(@PathVariable Long idUsuario, @RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) {
+    public UsuarioResponseDTO update(@PathVariable Long idUsuario,@Valid @RequestBody UsuarioUpdateDTO usuarioUpdateDTO) {
         return usuarioService.actualizarUsuario(idUsuario, usuarioUpdateDTO);
     }
 

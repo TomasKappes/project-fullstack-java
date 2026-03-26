@@ -4,15 +4,20 @@ import com.tomas.backend.DTOs.productos.ProductoResponseDTO;
 import com.tomas.backend.DTOs.productos.ProductoUpdateDTO;
 import com.tomas.backend.entity.Categoria;
 import com.tomas.backend.entity.Producto;
+import com.tomas.backend.excetions.custom.ResourceNotFoundException;
+import com.tomas.backend.repository.CategoriaRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductoMapper {
+    private final CategoriaRepository categoriaRepository;
 
-    public  ProductoMapper(){}
+    public  ProductoMapper(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
+    }
 
-    public Producto toEntity(ProductoCreateDTO productoCreateDTO) {
-        Producto producto = new Producto();
+    public Producto toEntity(ProductoCreateDTO productoCreateDTO,Categoria categoria) {
+        Producto producto = new Producto(productoCreateDTO.getNombre(), categoria);
         producto.setNombre(productoCreateDTO.getNombre());
         producto.setDescripcion(productoCreateDTO.getDescripcion());
         producto.setPrecio(productoCreateDTO.getPrecio());

@@ -1,16 +1,19 @@
 package com.tomas.backend.service.productos;
-import com.tomas.backend.DTOs.categoria.CategoriaRequestDTO;
 import com.tomas.backend.DTOs.productos.ProductoCreateDTO;
 import com.tomas.backend.DTOs.productos.ProductoResponseDTO;
 import com.tomas.backend.DTOs.productos.ProductoUpdateDTO;
 import com.tomas.backend.entity.Categoria;
 import com.tomas.backend.entity.Producto;
+import com.tomas.backend.excetions.custom.BadRequestException;
+import com.tomas.backend.excetions.custom.ConflictException;
+import com.tomas.backend.excetions.custom.ResourceNotFoundException;
 import com.tomas.backend.mappers.ProductoMapper;
 import com.tomas.backend.repository.CategoriaRepository;
 import com.tomas.backend.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +33,9 @@ public class ProductoService {
     public ProductoResponseDTO crearProducto(ProductoCreateDTO productoCreateDTO) {
 
         Categoria optCategoria  = categoriaRepository.findById(productoCreateDTO.getCategoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada"));
 
-         Producto producto =  productoMapper.toEntity(productoCreateDTO);
+         Producto producto =  productoMapper.toEntity(productoCreateDTO, optCategoria);
          producto.setCategoria(optCategoria);
          Producto productoGuardado = productoRepository.save(producto);
          return productoMapper.toResponseDTO(productoGuardado);
@@ -40,10 +43,10 @@ public class ProductoService {
 
     public ProductoResponseDTO obtenerProducto(Long idProducto){
         Producto optProducto= productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("No existe el producto con el id: "+idProducto));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
 
         if (!optProducto.isActivo()) {
-            throw new RuntimeException("El producto se encuentra desactivado");
+            throw new ConflictException("El producto se encuentra desactivado");
         }
 
         return productoMapper.toResponseDTO(optProducto);
@@ -61,13 +64,13 @@ public class ProductoService {
     public ProductoResponseDTO actualizarProducto(ProductoUpdateDTO productoUpdateDTO, Long idProducto) {
 
         Producto optProducto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("No existe el producto con el id: " + idProducto));
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el producto con el id: " + idProducto));
 
         Categoria categoria = null;
 
         if (productoUpdateDTO.getCategoriaId() != null) {
             categoria = categoriaRepository.findById(productoUpdateDTO.getCategoriaId())
-                    .orElseThrow(() -> new RuntimeException("La categoria que se le dio a este producto no existe"));
+                    .orElseThrow(() -> new ResourceNotFoundException("La categoria que se le dio a este producto no existe"));
 
         }
 
@@ -81,7 +84,7 @@ public class ProductoService {
 
    public List<ProductoResponseDTO> productosPorCategoria( Long idCategoria) {
         Categoria optCategoria = categoriaRepository.findById(idCategoria)
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada"));
 
         List<ProductoResponseDTO> productosDTO = new ArrayList<>();
 
@@ -94,7 +97,7 @@ public class ProductoService {
 
    public ProductoResponseDTO desactivarProducto(Long idProducto) {
         Producto optProducto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
 
         optProducto.setActivo(false);
         productoRepository.save(optProducto);
@@ -103,7 +106,7 @@ public class ProductoService {
 
     public ProductoResponseDTO activarProducto(Long idProducto) {
         Producto optProducto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
 
         optProducto.setActivo(true);
        productoRepository.save(optProducto);
@@ -112,14 +115,14 @@ public class ProductoService {
 
     public void aumentarStock(Long idProducto, Integer aumentoStock) {
         Producto optProducto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
 
         if (!optProducto.isActivo()) {
-            throw new RuntimeException("El producto se encuentra desactivado");
+            throw new ConflictException("El producto se encuentra desactivado");
         }
 
         if (aumentoStock <= 0) {
-            throw new RuntimeException("Error al aumentar stock, el valor de aumento debe ser mayor que 0");
+            throw new BadRequestException("Error al aumentar stock, el valor de aumento debe ser mayor que 0");
         }
         optProducto.setStock(optProducto.getStock() + aumentoStock);
         productoRepository.save(optProducto);
@@ -127,18 +130,18 @@ public class ProductoService {
 
     public void disminuirStock(Long idProducto, Integer disminuirStock) {
         Producto optProducto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
 
         if (!optProducto.isActivo()) {
-            throw new RuntimeException("El producto se encuentra desactivado");
+            throw new ConflictException("El producto se encuentra desactivado");
         }
 
         if (disminuirStock <= 0) {
-            throw new RuntimeException("Error al resta stock, el valor de resta debe ser mayor que 0");
+            throw new BadRequestException("Error al resta stock, el valor de resta debe ser mayor que 0");
         }
 
         if (disminuirStock > optProducto.getStock()) {
-            throw new RuntimeException("No se puede realizar la accion, el numero a restar es mayor que el stock");
+            throw new ConflictException("No se puede realizar la accion, Stock insuficiente");
         }
 
         optProducto.setStock(optProducto.getStock() - disminuirStock);
@@ -147,9 +150,17 @@ public class ProductoService {
 
     public boolean estaActivo(Long idProducto) {
         Producto optProducto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
 
         return optProducto.isActivo();
+    }
+
+    public ProductoResponseDTO actualizarPrecio(Long idProducto, BigDecimal precio) {
+        Producto optProducto = productoRepository.findById(idProducto).
+                orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
+
+        optProducto.setPrecio(precio);
+        return productoMapper.toResponseDTO(productoRepository.save(optProducto));
     }
 
 }

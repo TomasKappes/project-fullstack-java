@@ -1,4 +1,5 @@
 package com.tomas.backend.entity;
+import com.tomas.backend.enums.TipoCategoria;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,10 @@ public class Categoria {
 
     @Column(nullable = false)
     private Boolean activo = true;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoCategoria nombreCategoria;
 
     public Categoria() {
     }
@@ -39,6 +44,14 @@ public class Categoria {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+    public TipoCategoria getNombreCategoria() {
+        return nombreCategoria;
+    }
+
+    public void setNombreCategoria(TipoCategoria nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
     }
 }
 

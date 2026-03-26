@@ -1,5 +1,6 @@
 package com.tomas.backend.entity;
 
+import com.tomas.backend.enums.TipoCategoria;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -16,20 +17,21 @@ public class Producto {
     private String nombre;
 
     @Column
-    private String descripcion;
+    private String descripcion = "";
 
     @Column(nullable = false, precision = 10 , scale = 2)
-    private BigDecimal precio;
+    private BigDecimal precio = BigDecimal.ZERO;
 
     @Column(nullable = false)
-    private Integer stock;
+    private Integer stock = 0;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 
     @Column(nullable = false)
     private Boolean activo = true;
+
 
 
     public Long getIdProducto() {
@@ -80,9 +82,11 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    public Producto() {
-
+    public Producto(String nombre, Categoria categoria) {
+      this.nombre = nombre;
+      this.categoria = categoria;
     }
+    public Producto() {}
 
     public boolean isActivo() {
         return activo;
@@ -91,4 +95,5 @@ public class Producto {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
 }

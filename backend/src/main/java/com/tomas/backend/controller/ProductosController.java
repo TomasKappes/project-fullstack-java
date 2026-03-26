@@ -5,8 +5,10 @@ import com.tomas.backend.DTOs.productos.ProductoResponseDTO;
 import com.tomas.backend.DTOs.productos.ProductoUpdateDTO;
 import com.tomas.backend.entity.Producto;
 import com.tomas.backend.service.productos.ProductoService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -39,12 +41,12 @@ public class ProductosController {
     }
 
     @PostMapping("/crear")
-    public ProductoResponseDTO crearProducto(@RequestBody ProductoCreateDTO productoCreateDTO) {
+    public ProductoResponseDTO crearProducto(@Valid @RequestBody ProductoCreateDTO productoCreateDTO) {
         return productoService.crearProducto(productoCreateDTO);
     }
 
     @PostMapping("/actualizar/{idProducto}")
-    public ProductoResponseDTO actualizarProducto(@RequestBody ProductoUpdateDTO productoUpdateDTO, @PathVariable Long idProducto) {
+    public ProductoResponseDTO actualizarProducto(@Valid @RequestBody ProductoUpdateDTO productoUpdateDTO, @PathVariable Long idProducto) {
         return productoService.actualizarProducto(productoUpdateDTO,idProducto);
     }
 
@@ -58,14 +60,19 @@ public class ProductosController {
         return productoService.desactivarProducto(idProducto);
     }
 
-    @PostMapping("/Stock/aumento/{idProducto}/{cantidad}")
+    @PostMapping("/stock/aumento/{idProducto}/{cantidad}")
     public void aumentarStockProducto(@PathVariable Long idProducto,@PathVariable Integer cantidad) {
         productoService.aumentarStock(idProducto,cantidad);
     }
 
-    @PostMapping("/Stock/disminuir/{idProducto}/{cantidad}")
+    @PostMapping("/stock/disminuir/{idProducto}/{cantidad}")
     public void disminuirStockProducto(@PathVariable Long idProducto,@PathVariable Integer cantidad) {
        productoService.disminuirStock(idProducto,cantidad);
+    }
+
+    @PutMapping("/actualizarPrecio/{idProducto}/{precio}")
+    public ProductoResponseDTO actualizarPrecio(@PathVariable Long idProducto,@PathVariable BigDecimal precio) {
+        return productoService.actualizarPrecio(idProducto,precio);
     }
 
 }

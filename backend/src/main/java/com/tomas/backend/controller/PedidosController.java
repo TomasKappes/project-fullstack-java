@@ -5,6 +5,7 @@ import com.tomas.backend.DTOs.pedidos.PedidosResponseDTO;
 import com.tomas.backend.entity.Pedido;
 import com.tomas.backend.entity.PedidoDetalle;
 import com.tomas.backend.service.pedidos.PedidoService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,12 +23,12 @@ public class PedidosController {
     }
 
     @PostMapping("/crear")
-    public PedidosResponseDTO crear(@RequestBody PedidosCreateDTO pedido) {
+    public PedidosResponseDTO crear(@Valid @RequestBody PedidosCreateDTO pedido) {
         return pedidoService.crear(pedido);
     }
 
     @PutMapping("/agregar-producto/{idPedido}")
-    public PedidosResponseDTO editarPedido(@PathVariable Long idPedido,@RequestBody PedidosCreateDTO pedidosCreateDTO) {
+    public PedidosResponseDTO editarPedido(@PathVariable Long idPedido,@Valid @RequestBody PedidosCreateDTO pedidosCreateDTO) {
         return pedidoService.reCrearPedido(idPedido,pedidosCreateDTO);
     }
 

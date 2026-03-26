@@ -1,6 +1,7 @@
 package com.tomas.backend.controller;
 import com.tomas.backend.entity.Categoria;
 import com.tomas.backend.service.categorias.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CategoriasController {
     }
 
     @PostMapping("actualizar/{idCategoria}")
-    public Categoria actualizarCategoria(@RequestBody Categoria categoria,@PathVariable Long idCategoria){
+    public Categoria actualizarCategoria(@Valid @RequestBody Categoria categoria, @PathVariable Long idCategoria){
         return categoriaService.actualizarCategoria(categoria,idCategoria);
     }
 
@@ -40,7 +41,7 @@ public class CategoriasController {
     }
 
     @PostMapping("crear")
-    public Categoria crearCategoria(@RequestBody Categoria categoria){
+    public Categoria crearCategoria(@Valid @RequestBody Categoria categoria){
         return categoriaService.crearCategoria(categoria);
     }
 }
