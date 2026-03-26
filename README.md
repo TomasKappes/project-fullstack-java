@@ -1,81 +1,93 @@
-# Full Stack E-Commerce Application
+# 🖥️ PC Builder - Full Stack Application
 
-Full stack e-commerce system composed of a RESTful backend API and a lightweight frontend interface.
+Aplicación full stack que permite a los usuarios armar configuraciones de PC mediante la selección de componentes compatibles.
 
-This project focuses on applying professional backend architecture practices while integrating a functional client-side interface.
-
----
-
-## 🧱 Project Structure
-
+Este proyecto se enfoca en el desarrollo de un backend robusto con lógica de negocio real, aplicando buenas prácticas de arquitectura, seguridad y diseño de APIs.
 
 ---
 
-## 🚀 Backend Tech Stack
+## 🚀 Tecnologías
 
-- Java
-- Spring Boot
-- Maven (dependency management)
-- JPA / Hibernate
-- JTA (transaction management)
-- RESTful API design
-- DTO Pattern (no direct entity exposure)
-- Layered Architecture (Controller → Service → Repository)
+### Backend
 
----
+* Java
+* Spring Boot
+* Spring Security
+* JWT (JSON Web Tokens)
+* JPA / Hibernate
+* MySQL
+* Maven
 
-## 🎨 Frontend Tech Stack
+### Frontend
 
-- HTML5
-- CSS3
-- Bootstrap
-- Vanilla JavaScript
-
-The frontend provides a simple interface to interact with backend endpoints such as product management and order creation.
+* HTML5
+* CSS3
+* Bootstrap
+* JavaScript
 
 ---
 
-## 📦 Implemented Features
+## 🔐 Seguridad
 
-- Product management
-- Order creation workflow
-- DTO-based request and response handling
-- Refactored service layer for clean separation of concerns
-- Manual endpoint validation
+* Autenticación basada en JWT
+* Contraseñas hasheadas con BCrypt
+* Protección de endpoints mediante Spring Security
 
 ---
 
-## 🏗 Architecture Highlights
+## 🧩 Funcionalidades principales
 
-- Clear separation of layers in backend
-- DTO pattern to decouple persistence layer from API contract
-- No direct entity exposure
-- Structured service layer with business logic encapsulation
-- Transaction management with JTA
-- Modular and maintainable codebase
+* Registro y login de usuarios
+* Autenticación y autorización con JWT
+* Creación de configuraciones de PC
+* Validación de compatibilidad entre componentes (ej: CPU vs Motherboard)
+* Manejo global de excepciones con respuestas estructuradas
+* Uso de DTOs para desacoplar entidades de la API
+* Datos iniciales precargados (categorías y productos)
+
+---
+
+## 🧠 Lógica de negocio
+
+El sistema incluye validaciones personalizadas para garantizar la compatibilidad entre componentes, evitando combinaciones inválidas dentro de una configuración de PC.
+
+---
+
+## 🏗️ Arquitectura
+
+El backend sigue una arquitectura en capas:
+
+* **Controller** → manejo de requests HTTP
+* **Service** → lógica de negocio
+* **Repository** → acceso a datos
+* **DTO** → transferencia segura de datos
+
+Se aplican principios de separación de responsabilidades y código mantenible.
 
 ---
 
 ## 🧪 Testing
 
-- Backend endpoints manually tested using Postman
-
-
----
-
-## 🚧 Work in Progress
-
-This project is currently under active development. Planned improvements include:
-
-- Global exception handling with @ControllerAdvice
-- Validation enhancements
-- Spring Security integration
-- Unit and integration testing
-- UI/UX improvements
-- Full integration between frontend and backend
+* Endpoints testeados manualmente con Postman
 
 ---
 
-## 🎯 Purpose
+## 🚧 Estado del proyecto
 
-This project is part of my backend and full stack development learning journey, with a strong focus on clean architecture, professional Git workflow, and scalable application structure.
+El proyecto se encuentra en desarrollo activo. Próximas mejoras:
+
+* Integración completa con frontend
+* Implementación de roles (USER / ADMIN)
+* Tests unitarios e integración
+* Deploy de la aplicación
+
+---
+
+## 🎯 Objetivo
+
+Este proyecto forma parte de mi formación como desarrollador backend, con foco en:
+
+* Arquitectura profesional
+* Seguridad en aplicaciones web
+* Buenas prácticas en APIs REST
+* Desarrollo de lógica de negocio real
