@@ -29,6 +29,9 @@ public class PedidosController {
 
     @PutMapping("/agregar-producto/{idPedido}")
     public PedidosResponseDTO editarPedido(@PathVariable Long idPedido,@Valid @RequestBody PedidosCreateDTO pedidosCreateDTO) {
+
+        System.out.println(pedidosCreateDTO);
+
         return pedidoService.reCrearPedido(idPedido,pedidosCreateDTO);
     }
 

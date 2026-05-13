@@ -1,11 +1,14 @@
 package com.tomas.backend.excetions.handler;
 
 import com.tomas.backend.excetions.custom.ApiException;
+import com.tomas.backend.excetions.custom.InvalidCredentialsException;
 import com.tomas.backend.excetions.model.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -61,4 +64,58 @@ public class GlobalExceptionsHandler {
         ApiError error = new ApiError(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),"Unexpected error occurred", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+
+    @ExceptionHandler({
+            BadCredentialsException.class,
+            UsernameNotFoundException.class
+    })
+    public ResponseEntity<ApiError> handleInvalidCredentials(
+            Exception ex,
+            HttpServletRequest request) {
+
+        InvalidCredentialsException customEx =
+                new InvalidCredentialsException("Credenciales inválidas");
+
+        ApiError error = new ApiError(
+                LocalDateTime.now(),
+                customEx.getStatus().value(),
+                customEx.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(customEx.getStatus()).body(error);
+    }
+
+
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ApiError> handleDataIntegrityViolation(
+            Exception ex,
+            HttpServletRequest request) {
+
+        ApiError error = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Error de integridad de datos",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+
+    @ExceptionHandler(org.springframework.dao.DataAccessException.class)
+    public ResponseEntity<ApiError> handleDataAccess(
+            Exception ex,
+            HttpServletRequest request) {
+
+        ApiError error = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Error al acceder a la base de datos",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
 }

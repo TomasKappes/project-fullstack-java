@@ -8,7 +8,7 @@ public class ProductoResponseDTO {
     private String nombre;
     private String descripcion;
     private BigDecimal precio;
-    private Long categoriaId;
+    private Long productoId;
 
     public ProductoResponseDTO() {}
 
@@ -36,11 +36,11 @@ public class ProductoResponseDTO {
         this.precio = precio;
     }
 
-    public Long getCategoria() {
-        return categoriaId;
+    public Long getProductoId() {
+        return productoId;
     }
 
-    public void setCategoria(Long categoriaId) {
-        this.categoriaId = categoriaId;
+    public void setProductoId(Long productoId) {
+        this.productoId = productoId;
     }
 }

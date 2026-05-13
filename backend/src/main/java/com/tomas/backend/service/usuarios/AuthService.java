@@ -5,6 +5,8 @@ import com.tomas.backend.DTOs.auth.LoginRequest;
 import com.tomas.backend.DTOs.auth.RegisterRequest;
 import com.tomas.backend.entity.Usuario;
 import com.tomas.backend.enums.Roles;
+import com.tomas.backend.excetions.custom.ConflictException;
+import com.tomas.backend.excetions.custom.ResourceNotFoundException;
 import com.tomas.backend.repository.UsuarioRepository;
 import com.tomas.backend.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,15 +39,22 @@ public AuthResponse login(LoginRequest request) {
             )
     );
 
-    Usuario user = usuarioRepository.findByEmail(request.getEmail()).orElseThrow();
+    Usuario user = usuarioRepository.findByEmail(request.getEmail()).
+            orElseThrow(()->new ResourceNotFoundException("Usuario no encontrado"));
 
     String token = jwtService.generateToken(user);
+    Long userId = user.getIdUsuario();
 
-    return new AuthResponse(token);
+    return new AuthResponse(token,userId);
 }
 
 public String register(RegisterRequest request) {
     Usuario usuario = new Usuario();
+
+    if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
+        throw new ConflictException("El email ya está registrado");
+    }
+
     usuario.setRol(Roles.USER);
     usuario.setNombre(request.getUsername());
     usuario.setEmail(request.getEmail());

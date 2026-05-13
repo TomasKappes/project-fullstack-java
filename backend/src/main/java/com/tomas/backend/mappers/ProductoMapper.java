@@ -17,7 +17,7 @@ public class ProductoMapper {
     }
 
     public Producto toEntity(ProductoCreateDTO productoCreateDTO,Categoria categoria) {
-        Producto producto = new Producto(productoCreateDTO.getNombre(), categoria);
+        Producto producto = new Producto(productoCreateDTO.getNombre(), categoria,productoCreateDTO.getPrecio(),productoCreateDTO.getStock());
         producto.setNombre(productoCreateDTO.getNombre());
         producto.setDescripcion(productoCreateDTO.getDescripcion());
         producto.setPrecio(productoCreateDTO.getPrecio());
@@ -52,7 +52,7 @@ public class ProductoMapper {
         productoResponseDTO.setNombre(producto.getNombre());
         productoResponseDTO.setDescripcion(producto.getDescripcion());
         productoResponseDTO.setPrecio(producto.getPrecio());
-        productoResponseDTO.setCategoria(producto.getCategoria().getId());
+        productoResponseDTO.setProductoId(producto.getIdProducto());
 
 
         return productoResponseDTO;

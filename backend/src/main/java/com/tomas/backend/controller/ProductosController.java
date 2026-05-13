@@ -30,7 +30,7 @@ public class ProductosController {
         return productoService.obtenerProducto(idProducto);
     }
 
-    @GetMapping("/categoria/{idCategoria}")
+    @GetMapping("/{idCategoria}")
     public List<ProductoResponseDTO> getProductosPorCategoria(@PathVariable Long idCategoria) {
         return productoService.productosPorCategoria(idCategoria);
     }

@@ -82,9 +82,11 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    public Producto(String nombre, Categoria categoria) {
+    public Producto(String nombre, Categoria categoria, BigDecimal precio, Integer stock) {
       this.nombre = nombre;
       this.categoria = categoria;
+      this.precio = precio;
+      this.stock = stock;
     }
     public Producto() {}
 

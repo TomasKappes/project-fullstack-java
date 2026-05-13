@@ -31,6 +31,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(cors -> {
+                })
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
@@ -45,8 +47,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
 
 
     @Bean
@@ -71,7 +71,4 @@ public class SecurityConfig {
 
         return authProvider;
     }
-
-
 }
-
