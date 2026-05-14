@@ -1,11 +1,31 @@
+
+let pedidoCreado = false;
+let pedidoId = null;
+
+
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-    const usuarioId = Number(localStorage.getItem("usuarioId"));
-    const token = localStorage.getItem("token");
+     if (!pedidoCreado) {
 
-    const productos = [
+            await crearPedido();
+
+        } else {
+
+            await confirmarPedido();
+
+        }
+
+});
+
+
+async function crearPedido() {
+
+const usuarioId = Number(localStorage.getItem("usuarioId"));
+const token = localStorage.getItem("token");
+
+const productos = [
         pcBuild.cpu,
         pcBuild.gpu,
         pcBuild.motherboard,
@@ -53,6 +73,24 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
 
         alert("Presupuesto enviado correctamente");
 
+        pedidoCreado = true;
+        pedidoId = data.idPedido;
+
+        const boton = document.getElementById("btn-submit");
+
+        boton.textContent = "Confirmar pedido";
+
+        boton.style.backgroundColor = "green";
+
+        const resumen = document.getElementById("pc-total");
+
+        resumen.innerHTML = `
+            <div class="pedido-resumen-card">
+                <h2>Resumen del pedido</h2>
+                <p>Total: $${data.valorTotal}</p>
+            </div>
+        `;
+
     } catch (error) {
 
         console.error(error);
@@ -61,4 +99,34 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
 
     }
 
-});
+};
+
+async function confirmarPedido() {
+
+const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `http://localhost:8080/pedidos/confirmar/${pedidoId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }
+    );
+
+    if(response.ok){
+
+        alert("Pedido confirmado");
+
+    }
+
+    const boton = document.getElementById("btn-submit");
+
+    boton.textContent = "Confirmado!"
+
+    boton.style.backgroundColor = "red"
+
+    boton.disabled = true;
+
+}
