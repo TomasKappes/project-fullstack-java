@@ -63,11 +63,11 @@ const productos = [
 
         });
 
-        if (!response.ok) {
-            throw new Error("Error al enviar presupuesto");
-        }
-
         const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message);
+        }
 
         console.log("Respuesta backend:", data);
 
@@ -95,7 +95,7 @@ const productos = [
 
         console.error(error);
 
-        alert("Ocurrió un error");
+        mostrarMensaje(error.message,"error");
 
     }
 

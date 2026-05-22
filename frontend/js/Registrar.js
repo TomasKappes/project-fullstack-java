@@ -26,10 +26,10 @@ form.addEventListener("submit", async function(e) {
         });
 
 
- if (!response.ok) {
-            const errorText = await response.text();
-            alert("Error: " + errorText);
-            return;
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message);
         }
 
         alert("Usuario registrado correctamente");
@@ -37,6 +37,6 @@ form.addEventListener("submit", async function(e) {
 
     } catch (error) {
         console.error("Error en registro:", error);
-        alert("No se pudo registrar el usuario");
+        mostrarMensaje(error.message,"error")
     }
 });

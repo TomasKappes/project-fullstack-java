@@ -3,6 +3,7 @@ package com.tomas.backend.service.usuarios;
 import com.tomas.backend.DTOs.auth.AuthResponse;
 import com.tomas.backend.DTOs.auth.LoginRequest;
 import com.tomas.backend.DTOs.auth.RegisterRequest;
+import com.tomas.backend.DTOs.auth.RegisterResponse;
 import com.tomas.backend.entity.Usuario;
 import com.tomas.backend.enums.Roles;
 import com.tomas.backend.excetions.custom.ConflictException;
@@ -48,7 +49,7 @@ public AuthResponse login(LoginRequest request) {
     return new AuthResponse(token,userId);
 }
 
-public String register(RegisterRequest request) {
+public RegisterResponse register(RegisterRequest request) {
     Usuario usuario = new Usuario();
 
     if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -60,5 +61,6 @@ public String register(RegisterRequest request) {
     usuario.setEmail(request.getEmail());
     usuario.setPassword(passwordEncoder.encode(request.getPassword()));
     usuarioRepository.save(usuario);
-    return "User registered successfully";
+    String message = "Usuario registrado con exito";
+    return new RegisterResponse(message);
 }}

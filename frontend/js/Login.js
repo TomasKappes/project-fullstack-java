@@ -1,3 +1,5 @@
+
+
 const form = document.querySelector("form");
 
 form.addEventListener("submit", async function(e) {
@@ -23,11 +25,13 @@ form.addEventListener("submit", async function(e) {
             })
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error("Credenciales incorrectas");
+            throw new Error(data.message);
         }
 
-        const data = await response.json();
+
 
         console.log("Login exitoso:", data);
 
@@ -39,7 +43,8 @@ form.addEventListener("submit", async function(e) {
         window.location.href = "menu.html";
 
     } catch (error) {
+
         console.error("Error en login:", error);
-        alert("Email o contraseña incorrectos");
+        mostrarMensaje(error.message,"error")
     }
 });

@@ -3,6 +3,7 @@ package com.tomas.backend.controller;
 import com.tomas.backend.DTOs.auth.AuthResponse;
 import com.tomas.backend.DTOs.auth.LoginRequest;
 import com.tomas.backend.DTOs.auth.RegisterRequest;
+import com.tomas.backend.DTOs.auth.RegisterResponse;
 import com.tomas.backend.service.usuarios.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<RegisterResponse> register(
             @RequestBody RegisterRequest request
     ) {
         return ResponseEntity.ok(authService.register(request));
