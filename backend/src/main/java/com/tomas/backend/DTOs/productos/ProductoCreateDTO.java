@@ -19,6 +19,7 @@ public class ProductoCreateDTO {
     @Size(min = 1, max = 150)
     private String descripcion;
 
+    @NotNull(message = "El producto debe tener stock")
     @PositiveOrZero
     private Integer stock;
 

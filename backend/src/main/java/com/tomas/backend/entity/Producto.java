@@ -23,7 +23,7 @@ public class Producto {
     private BigDecimal precio = BigDecimal.ZERO;
 
     @Column(nullable = false)
-    private Integer stock = 0;
+    private int stock;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria")
@@ -82,7 +82,7 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    public Producto(String nombre, Categoria categoria, BigDecimal precio, Integer stock) {
+    public Producto(String nombre, Categoria categoria, BigDecimal precio, int stock) {
       this.nombre = nombre;
       this.categoria = categoria;
       this.precio = precio;

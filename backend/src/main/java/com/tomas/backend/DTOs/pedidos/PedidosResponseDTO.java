@@ -27,7 +27,7 @@ public class PedidosResponseDTO {
         this.nombreUsuario = nombreUsuario;
     }
 
-    public LocalDateTime getFechaPedido(LocalDateTime fecha) {
+    public LocalDateTime getFechaPedido() {
         return fechaPedido;
     }
 

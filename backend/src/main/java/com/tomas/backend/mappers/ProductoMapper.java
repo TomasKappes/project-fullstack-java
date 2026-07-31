@@ -16,13 +16,10 @@ public class ProductoMapper {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Producto toEntity(ProductoCreateDTO productoCreateDTO,Categoria categoria) {
-        Producto producto = new Producto(productoCreateDTO.getNombre(), categoria,productoCreateDTO.getPrecio(),productoCreateDTO.getStock());
-        producto.setNombre(productoCreateDTO.getNombre());
+    public Producto toEntity(ProductoCreateDTO productoCreateDTO, Categoria categoria) {
+        Producto producto = new Producto(productoCreateDTO.getNombre(), categoria, productoCreateDTO.getPrecio(), productoCreateDTO.getStock());
         producto.setDescripcion(productoCreateDTO.getDescripcion());
-        producto.setPrecio(productoCreateDTO.getPrecio());
         producto.setActivo(true);
-        producto.setStock(productoCreateDTO.getStock());
 
         return producto;
     }

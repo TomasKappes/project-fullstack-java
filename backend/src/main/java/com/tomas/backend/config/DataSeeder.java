@@ -113,7 +113,7 @@ public class DataSeeder implements CommandLineRunner {
                 new Producto("Kingston 1TB NVMe", almacenamiento, BigDecimal.valueOf(105), 20)
         );
 
-        if (cpuIntel == null || cpuAmd == null || gpu == null || motherboardIntel == null || ram == null || motherboardAmd==null) {
+        if (cpuIntel == null || cpuAmd == null || gpu == null || motherboardIntel == null || motherboardAmd == null || ram == null || almacenamiento == null) {
             throw new ResourceNotFoundException("Error en seed: categorías faltantes");
         }
 

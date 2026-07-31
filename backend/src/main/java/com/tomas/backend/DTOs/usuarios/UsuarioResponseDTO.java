@@ -1,15 +1,13 @@
 package com.tomas.backend.DTOs.usuarios;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 public class UsuarioResponseDTO {
 
     private String email;
     private String nombre;
+    private Long id;
 
-    public UsuarioResponseDTO() {}
+    public UsuarioResponseDTO() {
+    }
 
 
     public String getEmail() {
@@ -26,5 +24,13 @@ public class UsuarioResponseDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
