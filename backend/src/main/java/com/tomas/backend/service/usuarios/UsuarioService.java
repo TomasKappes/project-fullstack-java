@@ -73,7 +73,7 @@ public class UsuarioService {
 
         optUsuario.setEmail(usuarioUpdateDTO.getEmail());
         optUsuario.setNombre(usuarioUpdateDTO.getNombre());
-        optUsuario.setPassword(usuarioUpdateDTO.getPassword());
+        optUsuario.setPassword(passwordEncoder.encode(usuarioUpdateDTO.getPassword()));
 
         Usuario usuarioActualizado = usuarioRepository.save(optUsuario);
 

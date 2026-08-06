@@ -44,7 +44,7 @@ frontend/         Static HTML/CSS/JS (vanilla, no framework)
 
 - **Package typo**: `excetions` is intentional but misspelled — do not "fix" it without updating all imports across the codebase.
 - **Lombok is inconsistent**: DTOs under `DTOs/auth/` use `@Data` / `@AllArgsConstructor` / `@NoArgsConstructor`. All other classes (entities, other DTOs, mappers, services) use hand-written getters/setters/constructors. Follow existing pattern per file.
-- **CategoriasController returns entities**, not DTOs — `GET /categorias` returns `List<Categoria>` raw. This is inconsistent with the rest of the API but is the current state.
+- **CategoriasController returns DTOs** — `CategoriaService` was migrated to `CategoriaResponseDTO`/`CategoriaCreateDTO`/`CategoriaRequestDTO` and uses `CategoriaMapper`. It no longer returns raw `Categoria` entities.
 - **Wrong HTTP verbs in ProductosController**: Endpoints like `POST /actualizar/{id}`, `POST /activar/{id}`, `POST /desactivar/{id}` should semantically be `PUT` / `PATCH` but currently use `POST`. Follow the existing convention when editing.
 - **CORS**: `CorsConfig` defines a `CorsConfigurationSource` bean and `SecurityConfig` now wires it via `.cors(cors -> cors.configurationSource(...))`.
 - **Lombok version**: Project uses Lombok 1.18.46 (for JDK 25 compat), declared in both dependency and `maven-compiler-plugin` annotation processor path.
@@ -55,5 +55,8 @@ frontend/         Static HTML/CSS/JS (vanilla, no framework)
 
 ## Testing
 
-- Only 2 test files exist: `BackendApplicationTests` (context load) and `UsuarioServiceTest` (Mockito, 1 test scenario).
+- Test strategy lives in `ESTRATEGIA_DE_TESTING.md` (FASE 1 = services, FASE 2 = security, FASE 3 = controllers).
+- Existing test files: `BackendApplicationTests` (context load), `UsuarioServiceTest` (16), `CategoriaServiceTest` (13), `AuthServiceTest` (6), `CompatibilidadServiceTest` (12), `ProductoServiceTest` (32). FASE 1 services coverage: only `PedidoServiceTest` still pending.
+- Run a subset: `.\mvnw.cmd test "-Dtest=Clase1,Clase2"` (quotes required in PowerShell because of the comma).
+- **JDK note**: `java` in PATH is a JRE 1.8 — set `$env:JAVA_HOME = "C:\Users\GScom\.jdks\temurin-17.0.19"` before running Maven.
 - Integration tests require a running MySQL instance matching `application.properties`.

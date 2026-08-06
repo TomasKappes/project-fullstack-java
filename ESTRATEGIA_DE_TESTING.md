@@ -95,7 +95,7 @@ El proyecto actual tiene **2 archivos de prueba** y una cobertura casi nula. Est
 | **ALTA** | CompatibilidadServiceTest | Unitario (Mockito) | ~8 | productoRepository |
 | **ALTA** | PedidoServiceTest | Unitario (Mockito) | ~14 | pedidoRepository, usuarioRepository, productoRepository, pedidoMapper, pedidoDetalleMapper, compatibilidadService |
 | **ALTA** | ProductoServiceTest | Unitario (Mockito) | ~18 | productoRepository, categoriaRepository, productoMapper |
-| **ALTA** | CategoriaServiceTest | Unitario (Mockito) | ~10 | categoriaRepository |
+| **ALTA** | CategoriaServiceTest | Unitario (Mockito) | ~10 | categoriaRepository, categoriaMapper |
 | **ALTA** | AuthServiceTest | Unitario (Mockito) | ~6 | usuarioRepository, jwtService, authenticationManager, passwordEncoder |
 | **MEDIA** | JwtServiceTest | Unitario (Mockito) | ~5 | — (usa secretKey, solo asserts) |
 | **MEDIA** | JwtAuthenticationFilterTest | Integración ligera | ~5 | jwtService, userDetailsService, request/response/chain |
@@ -421,33 +421,33 @@ Este es el servicio más complejo. Requiere atención especial al mockear el flu
 
 **Archivo:** `backend/src/test/java/com/tomas/backend/service/categorias/CategoriaServiceTest.java`
 
-**Mocks necesarios:** `CategoriaRepository`
+**Mocks necesarios:** `CategoriaRepository`, `CategoriaMapper`
 
-> **Nota importante:** `CategoriaService` devuelve entidades (`Categoria`), no DTOs. No tiene mapper.
+> **Nota importante:** `CategoriaService` fue migrado a DTOs: `listarCategorias()`, `obtenerCategoria()`, `crearCategoria()`, `actualizarCategoria()`, `desactivarCategoria()` y `activarCategoria()` devuelven `CategoriaResponseDTO`. Ya no devuelve entidades `Categoria` crudas. Usa `CategoriaMapper` (con `toResponseDTO`, `toEntity` y `toUpdateEntity`). Los tests deben mockear `categoriaMapper`.
 
 #### `listarCategorias()`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
-| 1 | Hay categorías | `List<Categoria>` con todas, incluyendo activas e inactivas |
+| 1 | Hay categorías | `List<CategoriaResponseDTO>` con todas, incluyendo activas e inactivas |
 | 2 | No hay categorías | Lista vacía |
 
 #### `obtenerCategoria(Long id)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
-| 1 | Categoría existe y está activa | `Categoria` devuelta |
+| 1 | Categoría existe y está activa | `CategoriaResponseDTO` devuelta |
 | 2 | Categoría existe pero está desactivada | `ConflictException` ("La categoria se encuentra desactivada") |
-| 3 | Categoría no existe | `ResourceNotFoundException` |
+| 3 | Categoría no existe | `ResourceNotFoundException` ("No existe una categoria con el id: " + id) |
 
-#### `crearCategoria(Categoria)`
+#### `crearCategoria(CategoriaCreateDTO)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
-| 1 | Nombre no nulo, creación exitosa | `Categoria` guardada |
+| 1 | Nombre no nulo, creación exitosa | `CategoriaResponseDTO` devuelta; `mapper.toEntity()` y `repository.save()` invocados |
 | 2 | Nombre nulo | `BadRequestException` ("La categoria debe tener un nombre") |
 
-#### `actualizarCategoria(Categoria, Long id)`
+#### `actualizarCategoria(CategoriaRequestDTO, Long id)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
-| 1 | Categoría existe, activa, nombre válido | Nombre actualizado, `Categoria` retornada |
+| 1 | Categoría existe, activa, nombre válido | Nombre actualizado, `CategoriaResponseDTO` retornada; `mapper.toUpdateEntity()` y `repository.save()` invocados |
 | 2 | Categoría no existe | `ResourceNotFoundException` |
 | 3 | Categoría existe pero está desactivada | `ConflictException` |
 | 4 | Nombre nulo en update | `BadRequestException` |
@@ -455,13 +455,13 @@ Este es el servicio más complejo. Requiere atención especial al mockear el flu
 #### `desactivarCategoria(Long id)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
-| 1 | Categoría existe | `activo = false`, `Categoria` retornada |
+| 1 | Categoría existe | `activo = false`, `CategoriaResponseDTO` retornada |
 | 2 | Categoría no existe | `ResourceNotFoundException` |
 
 #### `activarCategoria(Long id)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
-| 1 | Categoría existe | `activo = true`, `Categoria` retornada |
+| 1 | Categoría existe | `activo = true`, `CategoriaResponseDTO` retornada |
 | 2 | Categoría no existe | `ResourceNotFoundException` |
 
 > **Total escenarios:** ~10 tests
