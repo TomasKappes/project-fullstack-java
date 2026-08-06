@@ -1,5 +1,7 @@
 package com.tomas.backend.controller;
-import com.tomas.backend.entity.Categoria;
+import com.tomas.backend.DTOs.categoria.CategoriaCreateDTO;
+import com.tomas.backend.DTOs.categoria.CategoriaRequestDTO;
+import com.tomas.backend.DTOs.categoria.CategoriaResponseDTO;
 import com.tomas.backend.service.categorias.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -16,32 +18,32 @@ public class CategoriasController {
     }
 
     @GetMapping
-    public List<Categoria> getCategorias(){
+    public List<CategoriaResponseDTO> getCategorias(){
         return categoriaService.listarCategorias();
     }
 
     @GetMapping("id/{idCategoria}")
-    public Categoria getCategoria(@PathVariable Long idCategoria){
+    public CategoriaResponseDTO getCategoria(@PathVariable Long idCategoria){
         return categoriaService.obtenerCategoria(idCategoria);
     }
 
     @PostMapping("actualizar/{idCategoria}")
-    public Categoria actualizarCategoria(@Valid @RequestBody Categoria categoria, @PathVariable Long idCategoria){
-        return categoriaService.actualizarCategoria(categoria,idCategoria);
+    public CategoriaResponseDTO actualizarCategoria(@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO, @PathVariable Long idCategoria){
+        return categoriaService.actualizarCategoria(categoriaRequestDTO,idCategoria);
     }
 
     @PostMapping("activar/{idCategoria}")
-    public Categoria activarCategoria(@PathVariable Long idCategoria){
+    public CategoriaResponseDTO activarCategoria(@PathVariable Long idCategoria){
         return categoriaService.activarCategoria(idCategoria);
     }
 
     @PostMapping("desactivar/{idCategoria}")
-    public Categoria desactivarCategoria(@PathVariable Long idCategoria){
+    public CategoriaResponseDTO desactivarCategoria(@PathVariable Long idCategoria){
         return categoriaService.desactivarCategoria(idCategoria);
     }
 
     @PostMapping("crear")
-    public Categoria crearCategoria(@Valid @RequestBody Categoria categoria){
-        return categoriaService.crearCategoria(categoria);
+    public CategoriaResponseDTO crearCategoria(@Valid @RequestBody CategoriaCreateDTO categoriaCreateDTO){
+        return categoriaService.crearCategoria(categoriaCreateDTO);
     }
 }

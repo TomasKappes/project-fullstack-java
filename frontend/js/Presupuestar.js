@@ -71,7 +71,7 @@ const productos = [
 
         console.log("Respuesta backend:", data);
 
-        alert("Presupuesto enviado correctamente");
+        mostrarMensaje("¡Presupuesto generado correctamente!", "success");
 
         pedidoCreado = true;
         pedidoId = data.idPedido;
@@ -117,7 +117,7 @@ const token = localStorage.getItem("token");
 
     if(response.ok){
 
-        alert("Pedido confirmado");
+        mostrarMensaje("¡Pedido confirmado correctamente!", "success");
 
     }
 

@@ -8,7 +8,7 @@ form.addEventListener("submit", async function(e) {
     const username = document.getElementById("username").value;
 
     if (!email || !password || !username) {
-        alert("Por favor completa todos los campos");
+        mostrarMensaje("Por favor completa todos los campos", "warning");
         return;
     }
 
@@ -32,8 +32,8 @@ form.addEventListener("submit", async function(e) {
             throw new Error(data.message);
         }
 
-        alert("Usuario registrado correctamente");
-        window.location.href = "login.html";
+        mostrarMensaje("¡Usuario registrado correctamente!", "success");
+        setTimeout(() => { window.location.href = "login.html"; }, 1500);
 
     } catch (error) {
         console.error("Error en registro:", error);

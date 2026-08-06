@@ -1,4 +1,5 @@
 package com.tomas.backend.mappers;
+import com.tomas.backend.DTOs.categoria.CategoriaCreateDTO;
 import com.tomas.backend.DTOs.categoria.CategoriaRequestDTO;
 import com.tomas.backend.DTOs.categoria.CategoriaResponseDTO;
 import com.tomas.backend.entity.Categoria;
@@ -16,11 +17,14 @@ public class CategoriaMapper {
         return categoriaResponseDTO;
     }
 
-    public Categoria toEntity(CategoriaRequestDTO categoriaRequestDTO) {
+    public Categoria toEntity(CategoriaCreateDTO categoriaCreateDTO) {
         Categoria categoria = new Categoria();
-        categoria.setId(categoriaRequestDTO.getCategoriaId());
-        categoria.setNombre(categoriaRequestDTO.getNombre());
+        categoria.setNombre(categoriaCreateDTO.getNombre());
         categoria.setActivo(true);
         return categoria;
+    }
+
+    public void toUpdateEntity(CategoriaRequestDTO categoriaRequestDTO, Categoria categoria) {
+        categoria.setNombre(categoriaRequestDTO.getNombre());
     }
 }

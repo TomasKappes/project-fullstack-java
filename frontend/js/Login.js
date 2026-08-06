@@ -9,7 +9,7 @@ form.addEventListener("submit", async function(e) {
     const password = document.getElementById("password").value;
 
     if (!email || !password) {
-        alert("Por favor completa todos los campos");
+        mostrarMensaje("Por favor completa todos los campos", "warning");
         return;
     }
 
@@ -39,8 +39,9 @@ form.addEventListener("submit", async function(e) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("usuarioId", data.usuarioId);
 
-        // Redirigir
-        window.location.href = "menu.html";
+        // Mostrar mensaje de éxito y redirigir
+        mostrarMensaje("¡Inicio de sesión correcto!", "success");
+        setTimeout(() => { window.location.href = "menu.html"; }, 1500);
 
     } catch (error) {
 
