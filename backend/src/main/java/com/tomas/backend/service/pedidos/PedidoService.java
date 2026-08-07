@@ -72,13 +72,11 @@ public class PedidoService {
 
 
 
-            if (producto.getStock() == 0){
-                throw new ConflictException("Producto sin stock");
+            if (producto.getStock() < detalle.getCantidad()) {
+                throw new ConflictException("Producto "+ producto.getNombre() + " sin stock disponible");
 
             }
-            if (producto.getStock() < detalle.getCantidad()){
-                throw new ConflictException("Stock insuficiente para la cantidad seleccionada");
-            }
+
 
             detalle.setProducto(producto);
             int cantidad = detalle.getCantidad();
@@ -99,6 +97,7 @@ public class PedidoService {
         pedido.setUsuario(usuario);
         pedido.setEstado(EstadoPedido.PRESUPUESTADO);
         pedido.setFecha(LocalDateTime.now());
+
 
         pedidoRepository.save(pedido);
 
@@ -129,17 +128,20 @@ public class PedidoService {
             throw new ConflictException("Este pedido ya fue confirmado");
         }
 
-        optPedido.setEstado(EstadoPedido.CONFIRMADO);
+
 
         for (PedidoDetalle detalle : optPedido.getPedidoDetalles()) {
             Producto producto = detalle.getProducto();
             Integer stock = producto.getStock();
             Integer cantidad = detalle.getCantidad();
+            if (stock < cantidad){
+                throw new ConflictException("Producto "+ producto.getNombre() + "sin stock disponible");
+            }
             Integer nuevoStock = stock - cantidad;
             producto.setStock(nuevoStock);
         }
 
-
+        optPedido.setEstado(EstadoPedido.CONFIRMADO);
         return pedidoMapper.toResponseDTO(optPedido);
 
     }
