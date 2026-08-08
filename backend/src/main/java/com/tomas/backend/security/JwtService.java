@@ -1,5 +1,6 @@
 package com.tomas.backend.security;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -37,7 +38,20 @@ public class JwtService {
 
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        } catch (JwtException | IllegalArgumentException e) {
+            // FIX (produccion): en jjwt 0.11.5, parseClaimsJws() valida la expiracion
+            // DURANTE el parseo y lanza ExpiredJwtException (hija de JwtException) antes
+            // de devolver los claims. Si no se captura aqui, JwtAuthenticationFilter
+            // propagaria la excepcion fuera de la cadena de filtros y el servidor
+            // responderia 500 en lugar de tratar al usuario como no autenticado.
+            // Cualquier token expirado, malformado, con firma invalida o base64 corrupto
+            // se interpreta como "sin usuario": devolver null permite que el filtro caiga
+            // en su guard `username != null` y continue la cadena (401/403 en endpoints
+            // protegidos).
+            return null;
+        }
     }
 
 
@@ -62,6 +76,13 @@ public class JwtService {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
 
+        // FIX (produccion): extractUsername devuelve null para tokens expirados o
+        // malformados (ver comentario en extractUsername). Si no se valida antes,
+        // `username.equals(...)` lanzaria NullPointerException.
+        if (username == null) {
+            return false;
+        }
+
         return username.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
     }
@@ -80,7 +101,10 @@ public class JwtService {
 
 
     // TOKEN EXPIRADO
-
+    // Nota: con jjwt 0.11.5 estos metodos quedan en gran parte inalcanzables para
+    // tokens expirados (parseClaimsJws ya valida "exp" durante el parseo y lanza
+    // ExpiredJwtException). Se conservan como defensa en profundidad por si el parser
+    // se configurara en el futuro sin validacion de expiracion.
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

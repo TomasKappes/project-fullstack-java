@@ -638,34 +638,37 @@ class JwtServiceTest {
 
 ### 8.1 Estado actual
 
-| Archivo | Tests | Cobertura de métodos |
-|---------|-------|---------------------|
-| `BackendApplicationTests.java` | 1 (contextLoads) | 0% — solo verifica que Spring Boot arranque |
-| `UsuarioServiceTest.java` | 2 | ~18% (2 de 11 métodos cubiertos) |
+> **Actualizado el 2026-08-08** tras completar FASE 1 y FASE 2. Total: **110 tests verdes** (BUILD SUCCESS).
+
+| Archivo | Paquete | Tests | Fase |
+|---------|---------|-------|------|
+| `BackendApplicationTests.java` | raíz | 1 (contextLoads) | — |
+| `UsuarioServiceTest.java` | `service.usuarios` | 16 | FASE 1 |
+| `AuthServiceTest.java` | `service.usuarios` | 6 | FASE 1 |
+| `ProductoServiceTest.java` | `service.productos` | 32 | FASE 1 |
+| `PedidoServiceTest.java` | `service.pedidos` | 17 | FASE 1 |
+| `CompatibilidadServiceTest.java` | `service.pedidos` | 12 | FASE 1 |
+| `CategoriaServiceTest.java` | `service.categorias` | 13 | FASE 1 |
+| `JwtServiceTest.java` | `security` | 6 | FASE 2 |
+| `CustomUserDetailsServiceTest.java` | `security` | 2 | FASE 2 |
+| `JwtAuthenticationFilterTest.java` | `security` | 5 | FASE 2 |
+| **Total** | | **110** | |
 
 ### 8.2 Brechas identificadas
 
-#### UsuarioServiceTest (brechas)
-- ❌ `crearUsuario()` — sin testear
-- ❌ `listaUsuarios()` — sin testear
-- ❌ `obtenerUsuarioPorEmail()` — sin testear
-- ❌ `eliminarUsuario()` — sin testear
-- ❌ `actualizarUsuario()` — sin testear
-- ❌ `loginUsuario()` — sin testear
-- ❌ `registrarUsuario()` — sin testear
-- ❌ `crearUsuario()` con password encodeado — sin verificar
+#### Brechas cerradas (FASE 1 + FASE 2 completas)
+- ✅ `CompatibilidadService` — **12 tests**
+- ✅ `PedidoService` — **17 tests**
+- ✅ `ProductoService` — **32 tests**
+- ✅ `CategoriaService` — **13 tests**
+- ✅ `AuthService` — **6 tests**
+- ✅ `JwtService` — **6 tests** (incluye token expirado y malformado tras fix de producción)
+- ✅ `JwtAuthenticationFilter` — **5 tests**
+- ✅ `CustomUserDetailsService` — **2 tests**
 
-#### Brechas globales
-- ❌ `CompatibilidadService` — **0 tests**, 0% cobertura
-- ❌ `PedidoService` — **0 tests**, 0% cobertura
-- ❌ `ProductoService` — **0 tests**, 0% cobertura
-- ❌ `CategoriaService` — **0 tests**, 0% cobertura
-- ❌ `AuthService` — **0 tests**, 0% cobertura
-- ❌ `JwtService` — **0 tests**, 0% cobertura
-- ❌ `JwtAuthenticationFilter` — **0 tests**, 0% cobertura
-- ❌ `CustomUserDetailsService` — **0 tests**, 0% cobertura
-- ❌ `PedidosDetalleService` — **0 tests**, 0% cobertura
-- ❌ Todos los controladores — **0 tests de integración**
+#### Brechas pendientes
+- ❌ `PedidosDetalleService` — **0 tests**, 0% cobertura (prioridad baja)
+- ❌ Todos los controladores — **0 tests de integración** (FASE 3 pendiente)
 
 ### 8.3 Objetivo de cobertura
 
@@ -702,6 +705,7 @@ class JwtServiceTest {
 | 1 | **Race condition en `confirmarPedido` (doble descuento de stock bajo concurrencia)** | El guard `if (estado == CONFIRMADO)` protege contra llamadas secuenciales, pero **no contra dos requests paralelos** sobre el mismo pedido `PRESUPUESTADO` (TOCTOU: ambos leen `PRESUPUESTADO`, ambos descuentan, ambos commitean). No existe `@Version` ni `@Lock` en el código. **Decisión tomada (2026-08-08):** se acepta como deuda para el MVP. Si se va a producción con ventas reales, implementar primero `@Version` (optimistic) y evaluar `@Lock(PESSIMISTIC_WRITE)` en el repository. | ✅ Aceptada — documentada |
 | 2 | ~~**`reCrearPedido` cancela el pedido original antes de validar el nuevo**~~ | ~~El pedido original pasa a `CANCELADO` en memoria sin `save` explícito antes de llamar a `crear()`. Si el pedido nuevo falla, la cancelación no se persiste (el test 17 de `PedidoServiceTest` documenta este comportamiento).~~ **RESUELTA — Opción A (2026-08-08):** se adopta la atomicidad transaccional. `reCrearPedido` es `@Transactional` y todas las `ApiException` extienden `RuntimeException`, por lo que si `crear()` falla, la transacción revierte y el original queda `PRESUPUESTADO` en BD. El estado en memoria puede ser `CANCELADO` pero no se persiste. Comportamiento documentado en `PedidoService.reCrearPedido` y en el test 17. | ✅ Resuelta — Opción A |
 | 3 | ~~**Inconsistencia en mensajes de stock**~~ | ~~`crear()` usa `"Producto {nombre} sin stock disponible"` (con espacio) y `confirmarPedido()` usa `"Producto {nombre}sin stock disponible"` (sin espacio — typo).~~ **RESUELTA (2026-08-08):** mensajes unificados con espacio. Los tests fueron actualizados al nuevo contrato. | ✅ Resuelta — unificada |
+| 4 | ~~**Token JWT expirado produce HTTP 500 en vez de 401/403**~~ | ~~En jjwt 0.11.5, `parseClaimsJws()` valida `exp` durante el parseo y lanza `ExpiredJwtException` antes de devolver claims. `JwtService.isTokenValid()` nunca podía devolver `false` para un token vencido y `JwtAuthenticationFilter` (línea 49) propagaba la excepción fuera de la cadena → 500 opaco. El frontend no podía distinguir "sesión expirada" de "servidor caído". Detectado por `deberiaRechazarUnTokenExpirado` en FASE 2.~~ **RESUELTA (2026-08-08):** `JwtService.extractUsername()` captura `JwtException`/`IllegalArgumentException` y devuelve `null` (el filtro ya tenía el guard `username != null`); `isTokenValid()` agrega guard anti-NPE y devuelve `false`. El test se actualizó al contrato nuevo (`assertFalse`) y se agregó `deberiaDevolverFalseCuandoElTokenEstaMalformado`. `isTokenExpired()`/`extractExpiration()` se conservan como defensa en profundidad. | ✅ Resuelta — fix en JwtService |
 
 ---
 

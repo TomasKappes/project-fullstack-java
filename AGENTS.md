@@ -57,7 +57,8 @@ frontend/         Static HTML/CSS/JS (vanilla, no framework)
 ## Testing
 
 - Test strategy lives in `ESTRATEGIA_DE_TESTING.md` (FASE 1 = services, FASE 2 = security, FASE 3 = controllers).
-- Existing test files: `BackendApplicationTests` (context load), `UsuarioServiceTest` (16), `CategoriaServiceTest` (13), `AuthServiceTest` (6), `CompatibilidadServiceTest` (12), `ProductoServiceTest` (32), `PedidoServiceTest` (17). **FASE 1 services coverage: complete** (96 tests). FASE 2 (security) and FASE 3 (controllers) pending.
+- Existing test files: `BackendApplicationTests` (context load), `UsuarioServiceTest` (16), `CategoriaServiceTest` (13), `AuthServiceTest` (6), `CompatibilidadServiceTest` (12), `ProductoServiceTest` (32), `PedidoServiceTest` (17), `JwtServiceTest` (6), `CustomUserDetailsServiceTest` (2), `JwtAuthenticationFilterTest` (5). **FASE 1 + FASE 2 complete: 110 tests, BUILD SUCCESS.** FASE 3 (controllers, `@WebMvcTest`) pending.
+- **JwtService is defensive by contract (since 2026-08-08)**: `extractUsername()` returns `null` for expired/malformed/invalid-signature tokens (catches `JwtException | IllegalArgumentException`) and `isTokenValid()` returns `false` instead of throwing. This was a real production bug (expired JWT caused HTTP 500 in `JwtAuthenticationFilter`); do not revert to "let jjwt throw" behavior. `isTokenExpired()`/`extractExpiration()` remain as defense-in-depth.
 - Run a subset: `.\mvnw.cmd test "-Dtest=Clase1,Clase2"` (quotes required in PowerShell because of the comma).
-- **JDK note**: `java` in PATH is a JRE 1.8 — set `$env:JAVA_HOME = "C:\Users\GScom\.jdks\temurin-17.0.19"` before running Maven.
-- Integration tests require a running MySQL instance matching `application.properties`.
+- **JDK note**: `java` in PATH is a JRE 1.8 — set `$env:JAVA_HOME` before running Maven. Original doc referenced `C:\Users\GScom\.jdks\temurin-17.0.19` but that path does NOT exist on this machine; the working JDK 17 is `C:\Program Files\Eclipse Adoptium\jdk-17.0.15.6-hotspot`.
+- Integration tests require a running MySQL instance matching `application.properties` (`BackendApplicationTests` uses `@SpringBootTest`; the 110 unit tests do not need a DB).
