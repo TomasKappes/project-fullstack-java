@@ -135,7 +135,7 @@ public class PedidoService {
             Integer stock = producto.getStock();
             Integer cantidad = detalle.getCantidad();
             if (stock < cantidad){
-                throw new ConflictException("Producto "+ producto.getNombre() + "sin stock disponible");
+                throw new ConflictException("Producto "+ producto.getNombre() + " sin stock disponible");
             }
             Integer nuevoStock = stock - cantidad;
             producto.setStock(nuevoStock);
@@ -159,6 +159,11 @@ public class PedidoService {
         }
 
         optPedido.setEstado(EstadoPedido.CANCELADO);
+
+        // Opción A (atomicidad): si crear() lanza una RuntimeException (todas las
+        // ApiException del proyecto lo son), @Transactional revierte TODA la
+        // transacción — el pedido original queda PRESUPUESTADO en BD.
+        // Decisión de negocio (2026-08-08): ver ESTRATEGIA_DE_TESTING.md §8.4.
 
         return crear(pedidoCreate);
 

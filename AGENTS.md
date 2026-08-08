@@ -50,13 +50,14 @@ frontend/         Static HTML/CSS/JS (vanilla, no framework)
 - **Lombok version**: Project uses Lombok 1.18.46 (for JDK 25 compat), declared in both dependency and `maven-compiler-plugin` annotation processor path.
 - **Byte Buddy**: `maven-surefire-plugin` uses `-Dnet.bytebuddy.experimental=true` for JDK 25 compatibility with Mockito.
 - **JWT secret key**: In `application.properties` as plaintext (`security.jwt.secret-key=myverysecuresecretkeyforjwttokens123`). Not production-safe. `JwtService` uses `secretKey.getBytes()` + `parserBuilder()` (deprecated in jjwt 0.12+).
+- **Known tech debt — `confirmarPedido` race condition**: The `if (estado == CONFIRMADO)` guard protects sequential calls but NOT concurrent ones (two parallel requests can both read `PRESUPUESTADO` and double-deduct stock — TOCTOU). No `@Version`/`@Lock` exists. **Accepted as technical debt for the MVP by decision (2026-08-08)** — do NOT "fix" silently; the decision log lives in `ESTRATEGIA_DE_TESTING.md` §8.4.
 - **Database**: MySQL on `localhost:3306/projectdb` with `ddl-auto=create-drop` — all data resets on restart. App must be running before frontend can log in.
 - **menu.html has hardcoded product data** — it does not fetch from the API (`GET /productos` is implemented but unused by frontend).
 
 ## Testing
 
 - Test strategy lives in `ESTRATEGIA_DE_TESTING.md` (FASE 1 = services, FASE 2 = security, FASE 3 = controllers).
-- Existing test files: `BackendApplicationTests` (context load), `UsuarioServiceTest` (16), `CategoriaServiceTest` (13), `AuthServiceTest` (6), `CompatibilidadServiceTest` (12), `ProductoServiceTest` (32). FASE 1 services coverage: only `PedidoServiceTest` still pending.
+- Existing test files: `BackendApplicationTests` (context load), `UsuarioServiceTest` (16), `CategoriaServiceTest` (13), `AuthServiceTest` (6), `CompatibilidadServiceTest` (12), `ProductoServiceTest` (32), `PedidoServiceTest` (17). **FASE 1 services coverage: complete** (96 tests). FASE 2 (security) and FASE 3 (controllers) pending.
 - Run a subset: `.\mvnw.cmd test "-Dtest=Clase1,Clase2"` (quotes required in PowerShell because of the comma).
 - **JDK note**: `java` in PATH is a JRE 1.8 — set `$env:JAVA_HOME = "C:\Users\GScom\.jdks\temurin-17.0.19"` before running Maven.
 - Integration tests require a running MySQL instance matching `application.properties`.

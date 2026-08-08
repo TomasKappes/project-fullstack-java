@@ -298,36 +298,36 @@ Este es el servicio más complejo. Requiere atención especial al mockear el flu
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
 | 1 | Pedido válido con 3+ componentes, stock suficiente | `PedidosResponseDTO` con total calculado correctamente, estado `PRESUPUESTADO`, fecha no nula |
-| 2 | Usuario no existe | `ResourceNotFoundException` |
-| 3 | Menos de 3 componentes en el detalle | `BadRequestException` ("debe tener almenos 3 componentes") |
-| 4 | Producto sin stock (stock = 0) | `ConflictException` ("Producto sin stock") |
-| 5 | Stock insuficiente para la cantidad solicitada | `ConflictException` ("Stock insuficiente para la cantidad seleccionada") |
-| 6 | Producto no encontrado en BD | `ResourceNotFoundException` |
-| 7 | CompatibilidadService lanza excepción | La excepción se propaga (no se requiere mock especial) |
-| 8 | Cálculo de total correcto (múltiples productos, cantidades variadas) | `total` = suma de `precio * cantidad` de cada detalle |
+| 2 | Usuario no existe | `ResourceNotFoundException` ("Usuario no Valido") |
+| 3 | Menos de 3 componentes en el detalle | `BadRequestException` ("El pedido debe tener almenos 3 componentes.") |
+| 4 | Producto con stock < cantidad (incluye stock = 0) | `ConflictException` ("Producto {nombre} sin stock disponible") — validación unificada en `stock < cantidad` |
+| 5 | Producto no encontrado en BD | `ResourceNotFoundException` ("Producto no encontrado") |
+| 6 | CompatibilidadService lanza excepción | La excepción se propaga (no se requiere mock especial) |
+| 7 | Cálculo de total correcto (múltiples productos, cantidades variadas) | `total` = suma de `precio * cantidad` de cada detalle |
 
 #### `obtenerPedido(Long id)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
 | 1 | Pedido existe | `PedidosResponseDTO` con datos correctos |
-| 2 | Pedido no existe | `ResourceNotFoundException` |
+| 2 | Pedido no existe | `ResourceNotFoundException` ("Pedido no encontrado") |
 
 #### `confirmarPedido(Long id)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
-| 1 | Pedido existe y está en estado `PRESUPUESTADO` | Estado cambia a `CONFIRMADO`, stock de cada producto se reduce |
+| 1 | Pedido existe y está en estado `PRESUPUESTADO`, stock suficiente | Estado cambia a `CONFIRMADO`, stock de cada producto se reduce |
 | 2 | Pedido ya está `CONFIRMADO` | `ConflictException` ("Este pedido ya fue confirmado") |
 | 3 | Pedido no existe | `ResourceNotFoundException` |
+| 4 | Stock insuficiente al confirmar | `ConflictException` ("Producto {nombre}sin stock disponible") — OJO: sin espacio antes de "sin", typo real en código |
 
 #### `reCrearPedido(Long id, PedidosCreateDTO)`
 | # | Escenario | Resultado esperado |
 |---|-----------|-------------------|
 | 1 | Pedido existe en estado `PRESUPUESTADO` | Pedido original pasa a `CANCELADO`, se crea un nuevo pedido con los nuevos detalles |
-| 2 | Pedido existe en estado `CONFIRMADO` | `ConflictException` ("Este pedido no puede modifcarse debido a que ya fue confirmado") |
+| 2 | Pedido existe en estado `CONFIRMADO` | `ConflictException` ("Este pedido no puede modifcarse debido a que ya fue confirmado") — typo "modifcarse" real en código |
 | 3 | Pedido no existe | `ResourceNotFoundException` |
 | 4 | Nuevo pedido inválido (errores de validación de `crear()`) | La excepción correspondiente se propaga |
 
-> **Total escenarios:** ~14 tests
+> **Total escenarios:** ~17 tests (incluye nuevo escenario de stock insuficiente al confirmar)
 
 ---
 
@@ -694,6 +694,14 @@ class JwtServiceTest {
     </executions>
 </plugin>
 ```
+
+### 8.4 Deuda técnica conocida y aceptada
+
+| # | Deuda | Detalle | Estado |
+|---|-------|---------|--------|
+| 1 | **Race condition en `confirmarPedido` (doble descuento de stock bajo concurrencia)** | El guard `if (estado == CONFIRMADO)` protege contra llamadas secuenciales, pero **no contra dos requests paralelos** sobre el mismo pedido `PRESUPUESTADO` (TOCTOU: ambos leen `PRESUPUESTADO`, ambos descuentan, ambos commitean). No existe `@Version` ni `@Lock` en el código. **Decisión tomada (2026-08-08):** se acepta como deuda para el MVP. Si se va a producción con ventas reales, implementar primero `@Version` (optimistic) y evaluar `@Lock(PESSIMISTIC_WRITE)` en el repository. | ✅ Aceptada — documentada |
+| 2 | ~~**`reCrearPedido` cancela el pedido original antes de validar el nuevo**~~ | ~~El pedido original pasa a `CANCELADO` en memoria sin `save` explícito antes de llamar a `crear()`. Si el pedido nuevo falla, la cancelación no se persiste (el test 17 de `PedidoServiceTest` documenta este comportamiento).~~ **RESUELTA — Opción A (2026-08-08):** se adopta la atomicidad transaccional. `reCrearPedido` es `@Transactional` y todas las `ApiException` extienden `RuntimeException`, por lo que si `crear()` falla, la transacción revierte y el original queda `PRESUPUESTADO` en BD. El estado en memoria puede ser `CANCELADO` pero no se persiste. Comportamiento documentado en `PedidoService.reCrearPedido` y en el test 17. | ✅ Resuelta — Opción A |
+| 3 | ~~**Inconsistencia en mensajes de stock**~~ | ~~`crear()` usa `"Producto {nombre} sin stock disponible"` (con espacio) y `confirmarPedido()` usa `"Producto {nombre}sin stock disponible"` (sin espacio — typo).~~ **RESUELTA (2026-08-08):** mensajes unificados con espacio. Los tests fueron actualizados al nuevo contrato. | ✅ Resuelta — unificada |
 
 ---
 
