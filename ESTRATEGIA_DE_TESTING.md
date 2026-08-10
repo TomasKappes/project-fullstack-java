@@ -638,7 +638,7 @@ class JwtServiceTest {
 
 ### 8.1 Estado actual
 
-> **Actualizado el 2026-08-08** tras completar FASE 1 y FASE 2. Total: **110 tests verdes** (BUILD SUCCESS).
+> **Actualizado el 2026-08-08** tras completar FASE 1, FASE 2 y FASE 3. Total: **130 tests verdes** (BUILD SUCCESS).
 
 | Archivo | Paquete | Tests | Fase |
 |---------|---------|-------|------|
@@ -652,7 +652,12 @@ class JwtServiceTest {
 | `JwtServiceTest.java` | `security` | 6 | FASE 2 |
 | `CustomUserDetailsServiceTest.java` | `security` | 2 | FASE 2 |
 | `JwtAuthenticationFilterTest.java` | `security` | 5 | FASE 2 |
-| **Total** | | **110** | |
+| `AuthControllerTest.java` | `controller` | 3 | FASE 3 |
+| `PedidosControllerTest.java` | `controller` | 5 | FASE 3 |
+| `ProductosControllerTest.java` | `controller` | 5 | FASE 3 |
+| `UsuariosControllerTest.java` | `controller` | 4 | FASE 3 |
+| `CategoriasControllerTest.java` | `controller` | 3 | FASE 3 |
+| **Total** | | **130** | |
 
 ### 8.2 Brechas identificadas
 
@@ -668,7 +673,8 @@ class JwtServiceTest {
 
 #### Brechas pendientes
 - ❌ `PedidosDetalleService` — **0 tests**, 0% cobertura (prioridad baja)
-- ❌ Todos los controladores — **0 tests de integración** (FASE 3 pendiente)
+- ⚠️ Cobertura parcial de endpoints en `ProductosControllerTest` (faltan: `GET /productos/{idCategoria}`, `GET /productos/activo/{id}`, `POST /productos/activar|desactivar`, stock, `PUT /actualizarPrecio`) — mejora futura
+- ⚠️ No hay test de 401/403 sin autenticación sobre un endpoint protegido — mejora futura
 
 ### 8.3 Objetivo de cobertura
 
@@ -906,7 +912,30 @@ assertNotNull(pedido.getFecha());
 - **DTOs, Enums, Excepciones personalizadas**: son POJOs sin lógica. No requieren tests unitarios.
 - **Métodos privados**: se prueban indirectamente a través de los métodos públicos que los invocan.
 
-### 10.12 Checklist de revisión de tests
+### 10.12 Gotchas de `@WebMvcTest` + Spring Security (aprendidos en FASE 3)
+
+> Estos son los 3 problemas reales que aparecieron al crear los tests de controladores. Documentados para que el equipo no los vuelva a sufrir.
+
+1. **`spring-security-test` no viene con `spring-boot-starter-test`.** Para usar `@WithMockUser` hay que agregar la dependencia explícita en el `pom.xml`:
+   ```xml
+   <dependency>
+       <groupId>org.springframework.security</groupId>
+       <artifactId>spring-security-test</artifactId>
+       <scope>test</scope>
+   </dependency>
+   ```
+2. **`@MockBean` de `CorsConfigurationSource` rompe el contexto.** `HandlerMappingIntrospector` (que Spring Security usa internamente para `requestMatchers`) implementa la interfaz `CorsConfigurationSource`. `@MockBean` reemplaza *todos* los beans asignables al tipo mockeado → pisa el introspector y el contexto no levanta. **Solución:** importar la config real con `@Import({SecurityConfig.class, CorsConfig.class})` en vez de mockear el bean CORS.
+3. **Mockear `JwtAuthenticationFilter` detiene la cadena de filtros.** Un mock de Mockito no ejecuta `chain.doFilter()`, así que la petición nunca llega al controller. **Solución:** configurar el mock como *pass-through* en `@BeforeEach`:
+   ```java
+   doAnswer(invocation -> {
+       FilterChain chain = invocation.getArgument(2);
+       chain.doFilter(invocation.getArgument(0), invocation.getArgument(1));
+       return null;
+   }).when(jwtAuthenticationFilter)
+           .doFilter(any(ServletRequest.class), any(ServletResponse.class), any(FilterChain.class));
+   ```
+
+### 10.13 Checklist de revisión de tests
 
 - [ ] ¿El test sigue el patrón AAA (Arrange-Act-Assert)?
 - [ ] ¿El nombre del test describe el escenario y el resultado esperado?
