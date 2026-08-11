@@ -10,41 +10,58 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="css/stylesMenu.css">
+    <link rel="stylesheet" href="css/mensajes.css">
 </head>
 <body>
-  
-  <footer class="text-center py-2 mt-5 border-top fw-bold">
-    <p class="fst-italic fs-2 text-white fw-bold ">Espacio Gamer</p>
-    <p>Asesoramiento y venta de componentes para pc de alta exigencia</p>
-  </footer>
+
+  <!-- Navbar con branding, usuario y cierre de sesión -->
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="menu.html">
+        <img src="assets/icons/icono.png" alt="Espacio Gamer" width="32" height="32" class="d-inline-block align-text-top">
+        <span class="fw-bold">Espacio Gamer</span>
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <span class="navbar-text text-white">
+          <i class="bi bi-person-circle me-1"></i>
+          <span id="navbar-username">Usuario</span>
+        </span>
+        <button type="button" id="btn-logout" class="btn btn-outline-light btn-sm">
+          <i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </nav>
 
   <div class="container mt-4">
 
       <!-- grilla -->
-    <ul class="nav nav-tabs justify-content-center fw-bold" id="productosTab" role="tablist">
+    <ul class="nav nav-tabs nav-tabs-gaming justify-content-center fw-bold" id="productosTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active text-dark fs-4 fst-italic  fw-bold bg-danger " id="placas-tab" data-bs-toggle="tab" data-bs-target="#placas" type="button" role="tab">Placas de Video</button>
+        <button class="nav-link active fs-4 fst-italic fw-bold" id="placas-tab" data-bs-toggle="tab" data-bs-target="#placas" type="button" role="tab">Placas de Video</button>
       </li>
 
       <li class="nav-item" role="presentation">
-        <button class="nav-link text-dark fs-4 fst-italic  fw-bold bg-danger" id="procesadores-tab" data-bs-toggle="tab" data-bs-target="#procesadores" type="button" role="tab">Procesadores</button>
+        <button class="nav-link fs-4 fst-italic fw-bold" id="procesadores-tab" data-bs-toggle="tab" data-bs-target="#procesadores" type="button" role="tab">Procesadores</button>
       </li>
 
       <li class="nav-item" role="presentation">
-        <button class="nav-link text-dark fs-4 fst-italic  fw-bold bg-danger" id="motherboards-tab" data-bs-toggle="tab" data-bs-target="#motherboards" type="button" role="tab">Motherboards</button>
+        <button class="nav-link fs-4 fst-italic fw-bold" id="motherboards-tab" data-bs-toggle="tab" data-bs-target="#motherboards" type="button" role="tab">Motherboards</button>
       </li>
 
         <li class="nav-item" role="presentation">
-        <button class="nav-link text-dark fs-4 fst-italic  fw-bold bg-danger" id="ram-tab" data-bs-toggle="tab" data-bs-target="#ram" type="button" role="tab">Ram</button>
+        <button class="nav-link fs-4 fst-italic fw-bold" id="ram-tab" data-bs-toggle="tab" data-bs-target="#ram" type="button" role="tab">Ram</button>
         </li>
 
         <li class="nav-item" role="presentation">
-            <button class="nav-link  text-dark fs-4 fst-italic  fw-bold bg-danger " id="alm-tab" data-bs-toggle="tab" data-bs-target="#alm" type="button" role="tab">Almacenamiento</button>
+            <button class="nav-link fs-4 fst-italic fw-bold" id="alm-tab" data-bs-toggle="tab" data-bs-target="#alm" type="button" role="tab">Almacenamiento</button>
         </li>
 
         <li class="nav-item" role="presentation">
-            <button class="nav-link  text-dark fs-4 fst-italic  fw-bold bg-primary " id="contacto-tab" data-bs-toggle="tab" data-bs-target="#contacto" type="button" role="tab"
-            ><i class="bi bi-cart-fill"></i> Carrito</button>
+            <button class="nav-link fs-4 fst-italic fw-bold" id="contacto-tab" data-bs-toggle="tab" data-bs-target="#contacto" type="button" role="tab">
+                <i class="bi bi-cart-fill"></i> Carrito
+                <span id="carrito-badge" class="badge bg-danger rounded-pill d-none">0</span>
+            </button>
         </li>
     </ul>
 
@@ -59,136 +76,136 @@
 
               <!-- Carta 1 -->
               <div class="col">
-                  <div class="card h-100" style="width:90%;max-width:300px;margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="1"
-                              onclick="seleccionarGPU('RTX 5070 Ti',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkQs3s47XEpw5lM1OffuAmjAjRX-YJ7i6mSg&s" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">RTX 5070 Ti</h5>
                           <p class="card-text">Potente tarjeta gráfica de gama alta...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="1"
+                                  onclick="seleccionarGPU('RTX 5070 Ti',this,900)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
 
               <!-- Carta 2 -->
               <div class="col">
-                  <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="2"
-                              onclick="seleccionarGPU('RX 7600 XT',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://hftecnologia.com.ar/img/Public/1123/8283-producto-1.jpg" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">RX 7600 XT</h5>
                           <p class="card-text">GPU de gama media...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="2"
+                                  onclick="seleccionarGPU('RX 7600 XT',this,400)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
 
               <!-- Carta 3 -->
               <div class="col">
-                  <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="3"
-                              onclick="seleccionarGPU('RX 7700 XT',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://www.topcomputacion.com.ar/wp-content/uploads/2024/04/sapphire_radeon_rx_7700_xt_pulse_12gb_gddr61.jpg" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">RX 7700 XT</h5>
                           <p class="card-text">GPU RDNA 3...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="3"
+                                  onclick="seleccionarGPU('RX 7700 XT',this,540)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
 
               <!-- Carta 4 -->
               <div class="col">
-                  <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="4"
-                              onclick="seleccionarGPU('RTX 3080 Ti',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://mauricomputacion.com.ar/images/productos/23570.webp" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">RTX 3080 Ti</h5>
                           <p class="card-text">GPU Ampere...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="4"
+                                  onclick="seleccionarGPU('RTX 3080 Ti',this,720)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
 
               <!-- Carta 5 -->
               <div class="col">
-                  <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="5"
-                              onclick="seleccionarGPU('RX 580',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://smarttucuman.com/img/Public/1130/26458-producto-xfx-placa-video-rx-580.jpg" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">RX 580</h5>
                           <p class="card-text">GPU Polaris...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="5"
+                                  onclick="seleccionarGPU('RX 580',this,150)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
 
               <!-- Carta 6 -->
               <div class="col">
-                  <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="6"
-                              onclick="seleccionarGPU('RX 6800 XT',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://spacegamer.com.ar/img/Public/1058-producto-91bb8b6e-76f8-4735-be9c-f7d57434ec04-7786.jpg" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">RX 6800 XT</h5>
                           <p class="card-text">GPU RDNA 2...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="6"
+                                  onclick="seleccionarGPU('RX 6800 XT',this,600)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
 
               <!-- Carta 7 -->
               <div class="col">
-                  <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="7"
-                              onclick="seleccionarGPU('GTX 1080',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRirLU0sTld2bnROfPhNKG0HdLtoUbnls1ajQ&s" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">GTX 1080</h5>
                           <p class="card-text">GPU Pascal...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="7"
+                                  onclick="seleccionarGPU('GTX 1080',this,220)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
 
               <!-- Carta 8 -->
               <div class="col">
-                  <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                      <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
-                              data-id="8"
-                              onclick="seleccionarGPU('GTX 1060',this)">
-                          <i class="bi bi-cart-fill"></i>
-                          Elegir componente
-                      </button>
+                  <div class="card h-100 card-producto">
                       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7zfxbdh2UQ8G-YNrOYF5IJGn1B2df0E7poQ&s" class="card-img-top">
                       <div class="card-body">
                           <h5 class="card-title">GTX 1060</h5>
                           <p class="card-text">GPU Pascal...</p>
+                          <button class="btn btn-placas btn-primary d-flex align-items-center gap-2"
+                                  data-id="8"
+                                  onclick="seleccionarGPU('GTX 1060',this,120)">
+                              <i class="bi bi-cart-fill"></i>
+                              Elegir componente
+                          </button>
                       </div>
                   </div>
               </div>
@@ -202,136 +219,136 @@
         <h2 class="text-center mb-4 fw-bold text-dark p-2 bg-danger rounded fst-italic fs-3">Procesadores</h2>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
          <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="9"
-                             onclick="seleccionarCPU('Ryzen 5 8600G',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://www.achorao.com/cdn/shop/files/amd-procesadores-default-title-procesador-amd-ryzen-5-8600g-4-3ghz-5-00ghz-730143316163-46366025842928_1400x.jpg?v=1738883806" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">Ryzen 5 8600G</h5>
                          <p class="card-text">El Ryzen 5 8600G tiene 6 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="9"
+                                 onclick="seleccionarCPU('Ryzen 5 8600G',this,280)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
 
              <!-- Carta 10 -->
              <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="10"
-                             onclick="seleccionarCPU('Ryzen 5 5500X3D',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://www.maximus.com.ar/Temp/App_WebSite/App_PictureFiles/Items/100-100000065BOX_800.jpg" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">Ryzen 5 5500X3D</h5>
                          <p class="card-text">El Ryzen 5 5500X3D cuenta con 6 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="10"
+                                 onclick="seleccionarCPU('Ryzen 5 5500X3D',this,240)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
 
              <!-- Carta 11 -->
              <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="11"
-                             onclick="seleccionarCPU('Ryzen 7 7700X',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://images.fravega.com/f300/37e63e69e02b27e8921b30825636e393.jpg.webp" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">Ryzen 7 7700X</h5>
                          <p class="card-text">El Ryzen 7 7700X tiene 8 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="11"
+                                 onclick="seleccionarCPU('Ryzen 7 7700X',this,380)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
 
              <!-- Carta 12 -->
              <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="12"
-                             onclick="seleccionarCPU('Ryzen 7 8700G',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://mexx-img-2019.s3.amazonaws.com/procesador-cpu-ryzen_40369_2.jpeg?v671?v267?v98" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">Ryzen 7 8700G</h5>
                          <p class="card-text">El Ryzen 7 8700G posee 8 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="12"
+                                 onclick="seleccionarCPU('Ryzen 7 8700G',this,400)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
 
              <!-- Carta 13 -->
              <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="13"
-                             onclick="seleccionarCPU('i5-12400F',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://git.gestionresellers.com.ar/public_image_server/32862/1708544392" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">i5-12400F</h5>
                          <p class="card-text">El Intel Core i5-12400F tiene 6 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="13"
+                                 onclick="seleccionarCPU('i5-12400F',this,190)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
 
              <!-- Carta 14 -->
              <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="14"
-                             onclick="seleccionarCPU('i5-14600K',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://git.gestionresellers.com.ar/public_image_server/32862/1708544392" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">i5-14600K</h5>
                          <p class="card-text">El Intel Core i5-14600K tiene 14 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="14"
+                                 onclick="seleccionarCPU('i5-14600K',this,360)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
 
              <!-- Carta 15 -->
              <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="15"
-                             onclick="seleccionarCPU('i7-13700F',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM95TCNlP0nBnaq8wdN00gfR8c1JM9c5uDMg&s" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">i7-13700F</h5>
                          <p class="card-text">El Intel Core i7-13700F tiene 16 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="15"
+                                 onclick="seleccionarCPU('i7-13700F',this,420)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
 
              <!-- Carta 16 -->
              <div class="col">
-                 <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                     <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
-                             data-id="16"
-                             onclick="seleccionarCPU('i7-14700F',this)">
-                         <i class="bi bi-cart-fill"></i>
-                         Elegir componente
-                     </button>
+                 <div class="card h-100 card-producto">
                      <img src="https://fullh4rd.com.ar/img/productos/1/micro-intel-core-i7-14700f-svideo-ccooler-s1700-0.jpg" class="card-img-top">
                      <div class="card-body">
                          <h5 class="card-title">i7-14700F</h5>
                          <p class="card-text">El Intel Core i7-14700F tiene 20 núcleos...</p>
+                         <button class="btn btn-cpu btn-primary d-flex align-items-center gap-2"
+                                 data-id="16"
+                                 onclick="seleccionarCPU('i7-14700F',this,460)">
+                             <i class="bi bi-cart-fill"></i>
+                             Elegir componente
+                         </button>
                      </div>
                  </div>
              </div>
@@ -348,136 +365,136 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <!-- 17 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="17"
-                            onclick="seleccionarMotherboard('ASUS ROG Strix B650E-F',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://www.deffo.com.ar/wp-content/uploads/2024/02/ROG-STRIX-B650E-F-GAMING-WIFI-fb.jpg" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">ASUS ROG Strix B650E-F</h5>
                         <p class="card-text">Ideal para gaming avanzado...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="17"
+                                onclick="seleccionarMotherboard('ASUS ROG Strix B650E-F',this,340)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 18 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="18"
-                            onclick="seleccionarMotherboard('MSI Tomahawk Z790 WiFi',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://http2.mlstatic.com/D_NQ_NP_778066-MLU70918623631_082023-O.webp" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">MSI Tomahawk Z790 WiFi</h5>
                         <p class="card-text">Pensada para procesadores Intel...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="18"
+                                onclick="seleccionarMotherboard('MSI Tomahawk Z790 WiFi',this,360)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 19 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="19"
-                            onclick="seleccionarMotherboard('Gigabyte B550 Aorus Elite V2',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://gorilagames.com/img/Public/1019-producto-mother-aorus-elite-v2-1-886.jpg" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">Gigabyte B550 Aorus Elite V2</h5>
                         <p class="card-text">Excelente relación calidad-precio...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="19"
+                                onclick="seleccionarMotherboard('Gigabyte B550 Aorus Elite V2',this,180)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 20 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="20"
-                            onclick="seleccionarMotherboard('ASRock B650M RipTide',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://pg.asrock.com/mb/photo/B650M%20PG%20Riptide(L1).png" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">ASRock B650M RipTide</h5>
                         <p class="card-text">Formato microATX...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="20"
+                                onclick="seleccionarMotherboard('ASRock B650M RipTide',this,220)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 21 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="21"
-                            onclick="seleccionarMotherboard('ASUS Prime Z690-P',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://spacegamer.com.ar/img/Public/1058-producto-2-8825.jpg" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">ASUS Prime Z690-P</h5>
                         <p class="card-text">Diseñada para creadores...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="21"
+                                onclick="seleccionarMotherboard('ASUS Prime Z690-P',this,200)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 22 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="22"
-                            onclick="seleccionarMotherboard('Gigabyte X670 Aorus Elite AX',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3XOI3lomIG-k_D6VpuBE5BBt_Rnt8HkEy4w&s" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">Gigabyte X670 Aorus Elite AX</h5>
                         <p class="card-text">Placa de gama alta...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="22"
+                                onclick="seleccionarMotherboard('Gigabyte X670 Aorus Elite AX',this,380)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 23 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="23"
-                            onclick="seleccionarMotherboard('MSI B550M Pro-VDH WiFi',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://m.media-amazon.com/images/I/71Mumt38AtL._AC_SL1280_.jpg" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">MSI B550M Pro-VDH WiFi</h5>
                         <p class="card-text">Ideal para uso doméstico...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="23"
+                                onclick="seleccionarMotherboard('MSI B550M Pro-VDH WiFi',this,160)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 24 -->
             <div class="col">
-                <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
-                            data-id="24"
-                            onclick="seleccionarMotherboard('ASRock Z790 Steel Legend',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
+                <div class="card h-100 card-producto">
                     <img src="https://static.nb.com.ar/i/nb_MOTHER-ASROCK-Z790-STEEL-LEGEND-WIFI_ver_5395a8c769242c332b7fc16fd4cb8b01.jpg" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">ASRock Z790 Steel Legend</h5>
                         <p class="card-text">Diseño robusto...</p>
+                        <button class="btn btn-mother btn-primary d-flex align-items-center gap-2"
+                                data-id="24"
+                                onclick="seleccionarMotherboard('ASRock Z790 Steel Legend',this,350)">
+                            <i class="bi bi-cart-fill"></i>
+                            Elegir componente
+                        </button>
                     </div>
                 </div>
             </div>
@@ -494,137 +511,138 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 <!-- 25 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                                data-id="25"
-                                onclick="seleccionarRAM('Corsair Vengeance 32GB DDR5',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://assets.corsair.com/image/upload/c_pad,q_85,h_1100,w_1100,f_auto/products/Memory/vengeance-rgb-ddr5-blk-config/Gallery/Vengeance-RGB-DDR5-2UP-BLACK_01.webp" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Corsair Vengeance 32GB DDR5</h5>
                             <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="25"
+                                    onclick="seleccionarRAM('Corsair Vengeance 32GB DDR5',this,180)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 26 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                                data-id="26"
-                                onclick="seleccionarRAM('Corsair Vengeance 16GB DDR5',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://assets.corsair.com/image/upload/c_pad,q_85,h_1100,w_1100,f_auto/products/Memory/vengeance-rgb-ddr5-blk-config/Gallery/Vengeance-RGB-DDR5-2UP-BLACK_01.webp" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Corsair Vengeance 16GB DDR5</h5>
                             <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="26"
+                                    onclick="seleccionarRAM('Corsair Vengeance 16GB DDR5',this,110)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 27 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                                data-id="27"
-                                onclick="seleccionarRAM('Corsair Vengeance 8GB DDR5',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://assets.corsair.com/image/upload/c_pad,q_85,h_1100,w_1100,f_auto/products/Memory/vengeance-rgb-ddr5-blk-config/Gallery/Vengeance-RGB-DDR5-2UP-BLACK_01.webp" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Corsair Vengeance 8GB DDR5</h5>
                             <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="27"
+                                    onclick="seleccionarRAM('Corsair Vengeance 8GB DDR5',this,70)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 28 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                                data-id="28"
-                                onclick="seleccionarRAM('Kingston 32GB DDR4',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://s3-sa-east-1.amazonaws.com/saasargentina/DNvSEm9o9X9GSO8SISok/imagen" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Kingston 32GB DDR4</h5>
                             <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="28"
+                                    onclick="seleccionarRAM('Kingston 32GB DDR4',this,130)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 29 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                                data-id="29"
-                                onclick="seleccionarRAM('Kingston 16GB DDR4',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://s3-sa-east-1.amazonaws.com/saasargentina/DNvSEm9o9X9GSO8SISok/imagen" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Kingston 16GB DDR4</h5>
                             <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="29"
+                                    onclick="seleccionarRAM('Kingston 16GB DDR4',this,75)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 30 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                                data-id="30"
-                                onclick="seleccionarRAM('Kingston 8GB DDR4',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://s3-sa-east-1.amazonaws.com/saasargentina/DNvSEm9o9X9GSO8SISok/imagen" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Kingston 8GB DDR4</h5>
                             <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="30"
+                                    onclick="seleccionarRAM('Kingston 8GB DDR4',this,45)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 31 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                                data-id="31"
-                                onclick="seleccionarRAM('Patriot 16GB DDR4',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://teamtecno.com.ar/wp-content/uploads/2018/12/1717114655fb8654dfa4f74f5accc6c4bf6ab11bb1.jpg" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Patriot 16GB DDR4</h5>
                             <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="31"
+                                    onclick="seleccionarRAM('Patriot 16GB DDR4',this,70)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 32 -->
-                <div class="col"><div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                    <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
-                            data-id="32"
-                            onclick="seleccionarRAM('TeamGroup 8GB DDR4',this)">
-                        <i class="bi bi-cart-fill"></i>
-                        Elegir componente
-                    </button>
-                    <img src="https://teamtecno.com.ar/wp-content/uploads/2018/12/1717114655fb8654dfa4f74f5accc6c4bf6ab11bb1.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">TeamGroup 8GB DDR4</h5>
-                        <p class="card-text">3200mhz</p>
+                <div class="col">
+                    <div class="card h-100 card-producto">
+                        <img src="https://teamtecno.com.ar/wp-content/uploads/2018/12/1717114655fb8654dfa4f74f5accc6c4bf6ab11bb1.jpg" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">TeamGroup 8GB DDR4</h5>
+                            <p class="card-text">3200mhz</p>
+                            <button class="btn btn-ram btn-primary d-flex align-items-center gap-2"
+                                    data-id="32"
+                                    onclick="seleccionarRAM('TeamGroup 8GB DDR4',this,35)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
+                        </div>
                     </div>
-                </div>
                 </div>
 
             </div>
@@ -640,128 +658,128 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 <!-- 33 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="33"
-                                onclick="seleccionarStorage('Kingston 256GB SSD',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="data:image/jpeg;base64,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" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Kingston 256GB SSD</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="33"
+                                    onclick="seleccionarStorage('Kingston 256GB SSD',this,30)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 34 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="34"
-                                onclick="seleccionarStorage('Kingston 512GB SSD',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="data:image/jpeg;base64,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" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Kingston 512GB SSD</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="34"
+                                    onclick="seleccionarStorage('Kingston 512GB SSD',this,50)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 35 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="35"
-                                onclick="seleccionarStorage('Seagate 2TB HDD',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdjYg760ERIk_b6sTTl3UNs5LUeZ1KQ8mDhw&s" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Seagate 2TB HDD</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="35"
+                                    onclick="seleccionarStorage('Seagate 2TB HDD',this,75)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 36 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="36"
-                                onclick="seleccionarStorage('Toshiba 1TB HDD',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="data:image/jpeg;base64,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" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Toshiba 1TB HDD</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="36"
+                                    onclick="seleccionarStorage('Toshiba 1TB HDD',this,55)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 37 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="37"
-                                onclick="seleccionarStorage('NVMe 1TB SSD',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="data:image/jpeg;base64,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" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">NVMe 1TB SSD</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="37"
+                                    onclick="seleccionarStorage('NVMe 1TB SSD',this,100)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 38 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="38"
-                                onclick="seleccionarStorage('NVMe 512GB SSD',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="data:image/jpeg;base64,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" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">NVMe 512GB SSD</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="38"
+                                    onclick="seleccionarStorage('NVMe 512GB SSD',this,65)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 39 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="39"
-                                onclick="seleccionarStorage('Kingston 256GB NVMe',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMSEBUQEhEWFhUWGBUaGBUXFhoeFhkYGBUYFhcYGB8YHSghGxslGxYfITEhJSkrLi4uFx8zODMtNyouLisBCgoKDg0OGxAQGi8lHyYtLi0tLy8vLS8tLS0tLS0tLS8tLS0tLystLTAtLS81LS0wLS0tLy0tLS0tLS0tLS0tLf/AABEIAKkBKgMBIgACEQEDEQH/xAAcAAEAAgMBAQEAAAAAAAAAAAAABgcBBAUDAgj/xAA+EAACAQMDAgMGBQEGBAcAAAABAgMABBEFEiEGMRMiQQcyUWFxgRQjQlKRoTNicoLB4SSSsdEVFkNEU1Tw/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECAwQF/8QAIxEBAAICAgEFAQEBAAAAAAAAAAECAxEhMQQSIkFRYRMyI//aAAwDAQACEQMRAD8AvGlKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClaWoatDBjxZFUn3VJ8zfJVHJ+wqI9Q9evGm63gGM43zNsAyODt7kH07HjGKmImZ0rNohO6VVl/7XgqBUtW8Xs4c4VSO+AMk/fFd7R+qGm2Tbsxt6Y4+BH1H+neqZrfxiJtHa2L/puK/Ca0r5RwQCOxr6qwUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpUY6g69sbTKvOHcceHF5nz8DjhfuRQSevl3AGSQAO5PaojH1FeXY/4OyaNCP7e68o/yoPM317Uj6KaZt+oXclye/hDyW4/yKfN96tFY+ZV9U/Ddk6yt2l/D25NxLz5YwSgx8XxtH8mvj8PqFwyl5EtosHdGgzKfh584HHPGDnFd6ysY4UCRRqijsqKAP6VsVG/pOvtwdP6RtIpfHEW+Xv4khLtnGMjd2+1efW2jfiLZiu7eoJG04JHfA+YIDD5j51IqwajZr6flzVJxI5fB3fqOMKT8QDz6HliSeM813OhtZ8OTwHICScqfQN8/kf8AQV2/an0+bS4FxGP+HnYlk/SspA3cYI5A3A49D8BUAmXY2AfgQR/T6V13rXNj9Dmra2K/qfozpvUMjwmPI93/AFFd8VUfR2ueLGGziSPAb6+jffH3INWpYXYkQMPuPnXl4JtWZxX7h35Ii0RevUtmlKV0silKUClKUClKUClKUClKUClKUClKUClKUClKUClKwTQZpUW1n2g6fbNse4DNnBWIb9v+LbwPoTmuPd6/qV+Nmn2rW8ZI/wCKuMKceuxCD/Iz9qnSJlNtS1OG3TxJ5UjX4uwH8Z7n6VB732miVzDptpLdSfu2lYx8z+rH12j516ab7L4Swmv5pLub1LMwT6YJJIH1x8qm9jYxQoI4Y0jQdlRQB/AqEq9/8rarf86heeBEf/bwYzj4Ejj+S9Snp/ouys8GGAFx/wCo/mf7E+79sVIaUClKUClKUClKUHO6g0eO7t5LaUeVxjPqpHKsPmDzX5w1GwaB3tZhiSE4Gd2D9O/B4I7d+e1fqCq59rfSwmi/Gxj8yIYfH6k9GPHO0/0J+Fa4r6nlllruOFS6Dqhtp1fnHZh8VPf/AL/art6c1MKQc5R8c+nI4P8AtVF3ahgGACtwGXK4z9ABzz25PxOQamXRGoOkYjlBCtkxP8ce8oGc/MDvycVl5+GZiM1O4aeJk1vFbpegNZrk9OXpli5BGOOR3HpXWqlLeqsStaNTopSlXQUpSgUpSgUpSgUpSgUpSgUpSgUpXF1zqq0tAfHnVSP0DzP/AMq8j71MRM9ImYjt2q0dV1iC2TfcTJGvxZsE/QdyfkKgF7r2q6i+3ToHtrfGDPMoVmOTkruyduMe6Cfn8NKw6Gs1l33t299c5OYkY8lQXZe5ZiFBOCRnjjkCoTDo3/tS8VzBptpJcSfuIIT64Hmx/i21zbvQ9QusNq2opaxNkiBGUHAGWGBheB8S/epBYtdvGiWNrHawkI37R6N+wHk8MMZIBHlJDV2rfpKHnxR4v5rSruycMcYGSctjYhyf1IG4NBFNItbG14sLF7iUdpnG7naTxnJU8DsqjkZIyMyBNJvp5RJcTrEiMGSOPnBVjjJ43Arg+YkckFak1rapGoSNFRR2VQAB9hXtQBSlKBSlKBSleVzcLGjSOcKoJJ+AHc0HrXjeXaRRtLK6oijLOxAVR8ST2qNdc61LDBBJbyIqS3EMUk20OUjlJTxE525DEcnI+R7VCpemtQvYyplfxVkmtbgzhlimtkn3xzAAbd/AAKjkHn4kJXqnX6CX8PawtJIZHgEsnktluEXeY3Y+b3efKpByOeeNvp/rEXFjFdGIh3GGQEBRKGKMilyC3mGAFDHkVHdS6ZAu5XluIkV54bnczAbZVRVLRR7jhuCPNnuDnuD66nocdsAxdSDgieVQ7bioJ2oBjcWQHDDHGc5PASPpfq+O8SR2jaARzNCDIy7XZTtJjIPmGeK2bbXo55TAkUjJghpCn5fOQVOefTHI9fhk1ELmVDE1w6iIE4El3hUKso/s0PJGV4jO4DC4PetG/wDaykMQWBPxUm7b4pBjTJ5JCY3kDPfC9xz3qdSjcIr1Z001jevEkZZZMvBtBJ2n3kPPZScHgnB7jPHr0h1LZ2SN41q0soJKMGUgDAG1ucAg57A9+1c3XuqLq98O5kcARndHjCoP3BQc7+2D3+Fcq109wsj3IdGkJaEGLaGJYFgeAAuDjgcZHBreLTaIiY4Y2iK87XBpXXMlzseOLZHnzcrxjuB3J+uAKn1rOHQOvYiq06F6DnjUySzKEcKdq85OOGznjg+lWTZWixIEXOPnXJNLVyTqeHRFotSOOWxSlKugpSlApSlApSlApSlApXE1vqy0tMiadQ37F8z/APKuSPqcCq31/wBsfcWyBBnGXBaQj1KgeRfuT9KtFJVm8dLeubhI1LyOqqO7MQAPqTUI1v2pWcJKQnxm/dnbEOPVm5P+UGqK1rqi4uX3ySu5Byu9s4+gACj7AV5adpNzeTIqo7GVtquxCqxAyVVpCFLYHug547cVPtj9R7p/Et132p3VxuXeUQ9khOz+XILH7ECpzpCWsHgGzsHuGuEEizyefvsHPouGbDdtuD8c1ReoWrRTPCysrIxUqwwwI9DVvewXqX+002Q/GSHP1/NT+TvH1aom89JikdpwNHvLpD+KnMIbH5UR4ABORx33BsEMzDyLxywrsWHTtvFtKxjch3BjyQ20qWA7KSGIOAOMDsBjrUqqxSlKBSlKBSuX1F1DbWMXj3UyxpnAzksx74UDlj9KjVp7UrN5ERorqMSMqpJJbuEZmOFAxk8n5etBML++jgTxJZFRcgZY4yWOFUfEk8ADk18afqcU4JikDbSAw5DKSMgMpwVJHPIrmdR2jyeFcwZZ4t+1VKZIkAUsnieXxABhdxAw7Anmovo96tvdNcYuGMiBWR5UlklYsp8XyMUAVFbasZOdz8AgCg2bvXLh7u48KVlEUiog2homGNrFxtyFEiybnLrjw8DPatw9RiaKSCfbG34cztIknlSMFSDLkFoXwc7WVh5WwzbTXMutC32iPOrbTI7GF/DZY2llLsS0eGkyxOCWAwV3Lnt66RfLb4J2pCDhwSiwhG5ycYRSPUdzgjn1D5sNbgSVILOCWRSviFZcxqAX5mbxVLsezbjgeYEHkgd/Xbt0IKszRt7iRKGLuoZjGSCMZ299w9Rj41NqWtaTAjQ20BuWDuVlXdEu0k7EkYndKVBKhgOwGCPXhal1ZeXEYhMvhQqNoghyke34Hks3z3E5ramC9mN89aLC1vqNISBPcxxkFvyo8zTgsxwSPcTBAYbySPjniovqHtCnUNFbJ4eWJM0pWWdm7E5I2r64ABxk4NQyOIDgCtq1spJW2Rozk+ign/pXVXxa17cs+VaeIbF1L+KnLyyM8jKSGlkwAQDwvfAOAAMgZHJGa8xbos0YYkICD4gBBYA7gygjhuw9Ru9cc1OdA9mF1Ko/EMIUJDbe75xj6Dj/AE+FWNoXQ9na4ZY97jHnk8zcfD0FZ3vSvES1pW9o5hWOl9NTXIkW2ssJIMeNccFfMCWjxzzjOOwye4xU10f2bRqFN3M85XGEyRGMKF7evCgZPPA+FT0DFZrnnLPw2/lHy87eFUUIgCqoAAHYAdgK9KUrNqUpSgUpSgUrBNRzXOuLK1yHm3OP0R+ZvuRwPuRUxWZ6VtaK9ykla97exwqXlkVFH6mYAf1qn+oPa+54gCxqc9vNMPT1GxfpzVa6t1PPO7M0jNuzy5DMBzwCRx39AKt6YjuVfVM9QvXXvajbQYEatJnOHOVj4HfJGT9hg5HNVb1H7T7y4JVZdiftiyoIz6n3iPvUZ0DTBPNEbgSrbySBDKuxfMQdqo02EJyOe+BUhtehAn40SlnnsSrm17CWAnJdZFOT5MnygYIx609WuoT6N/6lE5L2WV9oyWc+4i8seRgBeT3++a3rbpqfcpmhlVDuY4jdmKxuUkVcKQJMowAYjkfzZF9olrbWgn0+QRPI0N5ZvI+A+xMPal2I9GJ2sRnef2nDrDqmWDwruyumSOdRcGDegGSdsibHQkZdGJweSX4zzVeZW4hz9U6HgD3bWm0sYYLmxRsOssZZ3mRVbhzgKu3ngr+41tX2uWUtmtrHut3McV1boqk+BdqX3ogPur5M44ADE+oFQTXep5bhfCeV5IiXcRnaqxyPIZPIQuQoP6SSAOAexHIVZZQq9wvY4A9AOT6nCgZPooqEu311rsd9cfiRD4MpCpKmc7mQY8TgYB424yeFFcnRr+S3uIriH+0jYMvzI7g/IgkH5E1sQ6UB77fYV3NI0WWVhHbwsx/ujOOf1Hsv1Y0H6M0bUkubeO4j92RQwHqPip+YOQfpW7UK6B0q7sYGSdNys24IjBnjJHm3ZIBBx2UnnPfNec2u3EniSNL+HRGkUQpH4k5Ck7WdCuVJQBhyFG4d85oJurg5AIJBwfkcA4Pw4IP3FJHCgsxAA7k8AD51yulfE/Cr4xUzZfxdowPE3nd/2HyAxxioV1RbnU9bXSpnItIIBPJEpIMzlgAGI7oMj+D8RgLJklCqXJwoBJPpgDJP8VCuiuobzUZmvAqRaf50iRgTNKQceKT2UZGMfXvjNS6WwQwG3AwhjMYA9F27eM/AVRejQNptwkGsXl5DFauDbeErfhZFDbgWMakkk91Izg4J9KCR9XkSdSwRSlTttT+EDqXjFyzkBmReTjGef2KcjGR86NcajLds10JfAbxIrnLbYIQkZWRo8nCFXQSK4GWWc85XiWLfafrNtMVdvDXKGfaY2UMvJjaRcgYJH85FVl1HLYJi3bVNQ1FQQBbrIPCY54V5MeYZ/bk/SpiJnpEzEdpR7IdKS40yaNt3gC6l8Bxw5jACjkj4EjPcemCARs6rcw2S+Hd3UFuoLfk2y5mdcsBnHmAO7cMnAzzk81XV/wBcXksS28LLaW6DasNuCpC9sM5O4n5gjOajsMKjcSu4sDye4bIO7PqeMc/E10V8a08ywt5NYnUJ3f8AtOZYja2Fv4cXPnnw7c5zhPcUfLkfKoVqFzNcNvnlaQ+gY+Vf8K+6o+QAr7tUJO2NSWIxgDJOQAQBjtkAjPIPrUw0D2a3lxhpFEKH1f3j9AK6KVpjjc8Oe973nVZ2hbBf0rgfM5/rXY0Xpe6ujiGFiP3EYUfc1cmgezi0t8MymVx6v2z8hUwiiCgKoAA9AMCs7eXqNVhePF3O7SrLQPZKi4a7k3n9icD7mrB0vR4LddsMSoPkOf5rfpXLbJa3cummKtOoYrNKVRoUpSgUpSgUpSgVg1mlBQPW3U9808ttNKVCMy+GmVQ47ZAOWBBB5J71B3fLYyec9gSc48qgDnJbAH1q2fbRoe2SO9UcPiN/8QyUY/UZH2FVJeRnBI49e/NelGrYva82N1yzEuXIhBIPccV2OjtQhgvYZLmGOWHcokWRQwVScFxnjK53fY1o3y5CyAYB4IAbaGHoC2cnGCeT3rTxXmvSWXq/QDS3U9hFeDfF4k9vbyKQsscx3ZjffjIACHy90z27aOodcyi4gnKGK5jtmt55c5kYgEedGG33sHPPvH4CuBdaneX3hIzFliQRx4AUKoXbjd7zZA5yT3rNroAB87A4/Svb4YzQaB1GRhGq53R7gpGeAxJwFHCjk8Dj6c52F0ieT8yViOwy7bmxntyew5OPrUo0nSCxCQQlmwDhVJPPcHA7Zz3+AqaWHQLqviXkyQoSq8kFyWbaoPO0Elsdz3oKut9NjXkjOPVv49eKlmh9E3dzgrDsT98mVXH93IyfqAatzQ+k7W1ceHb7iFz47kM2c9hn3T6+UAV2ImxI0bOzFsuAU8qr5V27guDzzgndyfQUEH0j2bW0KiWbddNlcKmFTkgZA3eYAHPLdgePSp5Z2ccSCOKNUUdlRQFH2Fedqu3MWI1A/s0Q4/LCqORgYwcjjjGK+LKZUb8PypXGzfIGaRQoJdcsXIBO0lsHKn0wSG9Uc6jhXxUbwzIuN8yKu5ikZBRlHfcHI4HLKG77QKkdcbqeeeC3luLS3E1xhQIyxG4An4fDcTjjPPNBz9Lsb5Lqdy8aWzhWRGLSSbwqKS5J44U9mI9351qdVdLvdSw6jY3KxXcIKq/vQypk5ikx+nOeecZPGcEVb1DqN1Pn/wAW1Iqv/wBGx2s3b3XYHwx/md68rHq+4jtvwengWsCknLOZJjudQ53MML724qijGSRVq0mys3iFkTdTalbSRnUDp9vCD+YwlcySDB4iTBOc84x6Vxte9rwf8qxtt+c4ln4XgZyE9QBz5iv0qr2w8rPI5lY875HbkZAJJ5YnJxgehPwrAQ4EQYuATtAzjueQO/Ofh61008eN8ufJn1D217Wrm7BNzcu5BP5Q4iXH7VU7c5+WfnXQs5+UNq4g34DyuiqIyMNhWxlccAlR6rzXR0HoK8usER+Gn7n4/gVY+g+y21hw0xMzD0PC5q2T+deNq45yW50qaDpyWeUJa7rjIBMmxlXJJ3e93HrnnvU70D2RscNdy4H/AMad/uata1tUjXbGiqPgBivesp8m2tQ0jx673ZyNF6atbUYhhVT+7HmP3rrVmlYTMz23iIjopSlQkpSlApSlApSlApSlApSlApSlByuqNIW7tJbc/qXyn4MOVP8AIr80XMBVmRhhlJBB9CDgg/Q1+rKjGodK7pHeNlUOSxUrnzH3u3xPP3Na08icVZ1G2GTx4yWid6fmWVcNt/Sf+vof5rd6ct42dkdQXHIzznHBGP61Nvab0oIkMyoEdCN4X3WVjgMPnkj+vwqR+xHTrGaBp/AU3cb4d2JYgHlGUMcLkZHA5K1SckZPdEaa1pNPbM7cfQ+k7q4HkiIT9zAqn2J7/VQamGidB2qyFJrgTTIFZoUYLtDe6WAO/Bx3OM4qwsVB+udFjF3bX7Fk5FvJNGSskfiP+RIpHwlIQg5UiU5BAqqz30zqOKJYnW2WG0lyjOAAYLlXKNHcAcLlht8TONwwfeBPhb6EmoJcQXMkjrBdXahS2RmRQ0bH1zGk3kHYZB7gYzpdhLaz3MV/JbvbXW3azFV8SUjw5FeNuNzrtJC+UkE4G7A2enruzgkMFvK5a5KSKGDEIRCIFDEjcOLUg7udwIJBIFBudP3jTWn56lri1ZkkXO3dNEMBhyBtcEOM8YcfCvXUeorZAu+4CELJKdpVgUgZVmUtgrwXAPIPB+BqOvpupXsU0czrAXhaNWUkxbyGhnVozg7ThZEYFiCCd2GK1jWLzR9Plked42meTxPDUBnDFCjDC4wrFnJ3nH5jDOMAB0tWvLq58JrEKqzK6GV0YSwOrqSTwRjar+UgAsq+bzCvrULULJDfXU0NqYwC+NpLtsVfffGAu6VQADkSZ4NV3rftbk2+FYwrAnYHCs4HyUeRf61Bbq8uLuUGSVmdzgNIxPJ4A54UfbFXrjtbqFLZK17lcHUHtet48raxmY/vfKR/UZG5v6fWqx6h63vb3IkmbYc/lp5I8fMDlvvmuNDbDzbydwA2+uTnBX5cc/Y1KNB6NvLpdqQ7YyVbe4wAQMZXPPb09cCumvjREbvLmt5MzxWETSFu55+XYfSulaaTJNIY7dHcZ4wD29M44BxVu6F7KYI8NcuZW/aOE/3qeWGnRQrsijVAPQCptmx14pCK4clv9yqHQPZPM+GuXEa/tHLf7f0qyND6OtLUDw4QW/ewyf61IMUrmvmtbt0Uw1qAVmlKzalKUoFKUoFKUoFKUoFKUoFKUoFKUoFKUoFKUoFfEz7VLcnAJwO/AzxX3SgpX2odSpMrRIQS+0EA52oORnHqT6fCox7KNa/B6iu5wI5cRsOedxG1uBgbTySccZrc9pOh/hb+RVGI5PzEx8GPnX7Pn7EVCXYo+7ng8gMQSp95cjsCCR967I8etcXt+eXH/e1smrfD9d153Ee5GUMVJBAYd1JGMjPqO9QTpj2jWn4GNrm5QSoNrqCWZivAKgDLZGMnHfNRzqH2xscpZw7f78vLfZFOB9yfpXJqd6de47S206deOFZ7m8aKZVlV5N2UVJBGr7PFZtpJgWQEk4YnjHFcTVevtMtCTbRC4lBYiTGFDOSXxI4zySSdowSx+Jqq9R1G9vmLyNLKVBY8FgoAJJCqNqjAPp6Vrw2KLsaU7huIZOQcbQVKk/ENkduVINbVwWmdSyvmrWNu9r/tHvrvK+J4aHjZFlBj+8xO4/yB8qjTabyNzLknkKchSe5YjjuTxyeG+HMn0HpO7uVaOKEhHKks3C5XIyM89m+/HwqxtE9l6KF/FSmTGPy14QYGOw+/8n4mtvTTFPMsYvfJHEKks9L3nw4YmdiI8YHusAd4yBgqSeDx2FTbQ/ZXcS4adhEp9O7f7Vb2naVDAu2GJUHyFbtUnypiNVTHixM7ujOhdD2drgrEGf8Ae/J/rUlC44FZpXPa02ncy6a1ivUMVmlKqsUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgg3tb0Px7LxlGXgO/5lDxIP4w3+WqGmgz/+/rX6vljDKVYZBBBHxB4Iqg73oK6F5LbQxFkVjtc8LsPK8/Q4PzBrv8TJX0zW0uDyqWi0Wr8ohPpsqKu/cBjCgkcD3tvB494nB+JruR6Xbq0JgzdFuXiUOCOONx2jac/DP+ps3TvZw8ix/j7p5RGMJEDhVHwz3P1qa6VosFsu2GJUHyAzVJzUr13+dLxivaZ+v3tVek9A3c7u7YtIpWDGJTk8HIA54wTn71OtB6Cs7bDCPe4/U/P8fCpVSsLZrW/G1cFa/r5RABgAAD0Has1mlZNmKzSlApSlApSlApSlApSlApSlApSlApSlApSlApSlApSlApSlApSlApSlApSlArGKzSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSg//9k=" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Kingston 256GB NVMe</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="39"
+                                    onclick="seleccionarStorage('Kingston 256GB NVMe',this,35)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 40 -->
                 <div class="col">
-                    <div class="card h-100" style="width: 90%; max-width: 300px; margin:auto;">
-                        <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
-                                data-id="40"
-                                onclick="seleccionarStorage('Kingston 1TB NVMe',this)">
-                            <i class="bi bi-cart-fill"></i>
-                            Elegir componente
-                        </button>
+                    <div class="card h-100 card-producto">
                         <img src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRWxfDIvfdvhTwUkkaDG1TO0UDPxjWbqlswpk7zvh1LVvWwwrED_BjnFePp6Q6LNnQppcEpntRjeBBjkcFH4r5qtgoxA-Vzulz2JoydVD1znx3wCRvwpY5V8kuus75FZKomvuoOQVOfV8M&usqp=CAc" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">Kingston 1TB NVMe</h5>
+                            <button class="btn btn-alm btn-primary d-flex align-items-center gap-2"
+                                    data-id="40"
+                                    onclick="seleccionarStorage('Kingston 1TB NVMe',this,105)">
+                                <i class="bi bi-cart-fill"></i>
+                                Elegir componente
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -809,14 +827,16 @@
   </div>
 
   <footer class="text-center py-3 mt-5 border-top text-primary fw-bold">
-    <p>© 2025 - Desarrollado por Tomas Kappes | Proyecto -Pc Builder-</p>
+    <p class="fst-italic fs-2 text-white fw-bold mb-1">Espacio Gamer</p>
+    <p class="mb-1">Asesoramiento y venta de componentes para pc de alta exigencia</p>
+    <p class="mb-0">© 2026 - Desarrollado por Tomas Kappes | Proyecto -Pc Builder-</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/MostrarMensaje.js"></script>
+  <script src="js/Navbar.js"></script>
   <script src="js/Build.js"></script>
   <script src="js/Actualizar.js"></script>
   <script src="js/Presupuestar.js"></script>
-  </div>
 </body>
 </html>

@@ -1,142 +1,64 @@
+/* ============================================================
+   styles.css — Login / Registro (tema oscuro gaming)
+   ------------------------------------------------------------
+   Las variables de color se definen UNA sola vez en
+   stylesMenu.css (:root), que se carga ANTES que este archivo
+   en login.html y register.html. Así la paleta tiene una única
+   fuente de verdad y no se duplica.
+   ============================================================ */
+
 body {
     background-image: url('../images/fondo.jpg'); /* si querés una imagen */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    color: var(--text-light);
+    /* Bootstrap usa --bs-body-bg en varios componentes (form-control,
+       label flotante, .bg-body). Lo oscurecemos para el tema gaming. */
+    --bs-body-bg: var(--bg-dark);
 }
 
 form {
-    background-color: rgba(255, 255, 255, 0.85); /* blanco semi-transparente */
+    background-color: rgba(33, 32, 32, 0.85); /* var(--bg-dark) al 85% */
     padding: 2rem;
     border-radius: 0.5rem;
-    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(5px); /* efecto blur detrás */
 }
 
-/* Inputs y etiquetas para mejor contraste */
-.form-control, label {
-    color: #111; /* texto oscuro sobre fondo claro */
+/* El borde lo aporta la clase .border de Bootstrap; solo cambiamos el color */
+form.border {
+    border-color: var(--border-color);
 }
 
-/* Botón más visible */
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-    font-weight: bold;
+/* Título del formulario en claro */
+form h1 {
+    color: var(--text-white);
 }
 
-.error {
-
-    background: linear-gradient(135deg, #ffdddd, #f8bcbc);
-
-    color: #7a1111;
-
-    padding: 16px 20px;
-
-    margin-top: 18px;
-
-    border-radius: 12px;
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-    border-left: 6px solid #d90429;
-
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-
-    animation: aparecer 0.3s ease;
-
+/* Inputs oscuros con texto claro */
+.form-control {
+    background-color: #2a2a2a; /* un tono más claro que --bg-dark para contraste */
+    color: var(--text-white);
+    border: 1px solid var(--border-color);
 }
 
-.success {
-
-    background: linear-gradient(135deg, #d4edda, #b7e4c7);
-
-    color: #155724;
-
-    padding: 16px 20px;
-
-    margin-top: 18px;
-
-    border-radius: 12px;
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-    border-left: 6px solid #28a745;
-
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    animation: aparecer 0.4s ease;
-
+.form-control:focus {
+    background-color: #2a2a2a;
+    color: var(--text-white);
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 0 0.25rem rgba(0, 191, 255, 0.25);
 }
 
-.warning {
-
-    background: linear-gradient(135deg, #fff3cd, #ffe0a3);
-
-    color: #7a5c00;
-
-    padding: 16px 20px;
-
-    margin-top: 18px;
-
-    border-radius: 12px;
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-    border-left: 6px solid #ffc107;
-
-    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.25);
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    animation: aparecer 0.4s ease;
-
+/* Labels del form-floating en claro */
+.form-floating > label {
+    color: var(--text-light);
 }
 
-.mensaje-icono {
-
-    font-size: 20px;
-
-    font-weight: bold;
-
+/* El label flotante de Bootstrap pinta un ::after con --bs-body-bg;
+   lo alineamos con el fondo de los inputs para que no se vea un
+   rectángulo claro detrás del label cuando flota. */
+.form-floating > .form-control:focus ~ label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ label::after {
+    background-color: #2a2a2a;
 }
-
-@keyframes aparecer {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(-10px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-    }
-
-}
-
-
-
-

@@ -1,0 +1,68 @@
+/* ============================================================
+   mensajes.css — Mensajes de feedback (error / success / warning)
+   ------------------------------------------------------------
+   Usados por js/MostrarMensaje.js: el contenedor #mensaje-ui
+   recibe la clase (error | success | warning) y un <span> con
+   clase .mensaje-icono. Compartidos por login, register y menu.
+   ============================================================ */
+
+.error {
+    background: linear-gradient(135deg, #ffdddd, #f8bcbc);
+    color: #7a1111;
+    padding: 16px 20px;
+    margin-top: 18px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-left: 6px solid #d90429;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    animation: aparecer 0.3s ease;
+}
+
+.success {
+    background: linear-gradient(135deg, #d4edda, #b7e4c7);
+    color: #155724;
+    padding: 16px 20px;
+    margin-top: 18px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-left: 6px solid #28a745;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: aparecer 0.4s ease;
+}
+
+.warning {
+    background: linear-gradient(135deg, #fff3cd, #ffe0a3);
+    color: #7a5c00;
+    padding: 16px 20px;
+    margin-top: 18px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-left: 6px solid #ffc107;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: aparecer 0.4s ease;
+}
+
+.mensaje-icono {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

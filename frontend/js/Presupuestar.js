@@ -1,31 +1,32 @@
+// ============================================================
+// Presupuestar.js — Flujo crear → confirmar pedido
+// ------------------------------------------------------------
+// 1er click:  POST /pedidos/crear      → botón "Confirmar pedido" (verde)
+// 2do click:  PUT  /pedidos/confirmar  → botón "Confirmado!" (rojo, disabled)
+// Muestra spinner en el botón durante cada fetch.
+// ============================================================
 
 let pedidoCreado = false;
 let pedidoId = null;
-
 
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-     if (!pedidoCreado) {
-
-            await crearPedido();
-
-        } else {
-
-            await confirmarPedido();
-
-        }
+    if (!pedidoCreado) {
+        await crearPedido();
+    } else {
+        await confirmarPedido();
+    }
 
 });
 
-
 async function crearPedido() {
 
-const usuarioId = Number(localStorage.getItem("usuarioId"));
-const token = localStorage.getItem("token");
+    const usuarioId = Number(localStorage.getItem("usuarioId"));
+    const token = localStorage.getItem("token");
 
-const productos = [
+    const productos = [
         pcBuild.cpu,
         pcBuild.gpu,
         pcBuild.motherboard,
@@ -47,6 +48,13 @@ const productos = [
     };
 
     console.log("DTO enviado:", pedidoDTO);
+
+    const boton = document.getElementById("btn-submit");
+    const textoOriginal = boton.textContent;
+
+    // Estado de carga (spinner)
+    boton.disabled = true;
+    boton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
 
     try {
 
@@ -76,10 +84,9 @@ const productos = [
         pedidoCreado = true;
         pedidoId = data.idPedido;
 
-        const boton = document.getElementById("btn-submit");
-
+        // Flujo: el botón pasa a "Confirmar pedido" (verde)
+        boton.disabled = false;
         boton.textContent = "Confirmar pedido";
-
         boton.style.backgroundColor = "green";
 
         const resumen = document.getElementById("pc-total");
@@ -95,38 +102,70 @@ const productos = [
 
         console.error(error);
 
-        mostrarMensaje(error.message,"error");
+        mostrarMensaje(error.message, "error");
+
+        // Restaurar el botón a su estado original
+        boton.disabled = false;
+        boton.innerHTML = textoOriginal;
 
     }
 
-};
+}
 
 async function confirmarPedido() {
 
-const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-    const response = await fetch(
-        `http://localhost:8080/pedidos/confirmar/${pedidoId}`,
-        {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${token}`
+    const boton = document.getElementById("btn-submit");
+    const textoOriginal = boton.textContent;
+
+    // Estado de carga (spinner)
+    boton.disabled = true;
+    boton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:8080/pedidos/confirmar/${pedidoId}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             }
-        }
-    );
+        );
 
-    if(response.ok){
+        if (!response.ok) {
+            let mensaje = "No se pudo confirmar el pedido";
+            try {
+                const data = await response.json();
+                if (data && data.message) {
+                    mensaje = data.message;
+                }
+            } catch (e) {
+                // respuesta sin cuerpo JSON
+            }
+            throw new Error(mensaje);
+        }
 
         mostrarMensaje("¡Pedido confirmado correctamente!", "success");
 
+        // Flujo: botón final "Confirmado!" (rojo, deshabilitado)
+        boton.textContent = "Confirmado!";
+        boton.style.backgroundColor = "red";
+        boton.disabled = true;
+
+    } catch (error) {
+
+        console.error(error);
+
+        mostrarMensaje(error.message, "error");
+
+        // Restaurar el botón al estado "Confirmar pedido" (verde)
+        boton.disabled = false;
+        boton.innerHTML = textoOriginal;
+        boton.style.backgroundColor = "green";
+
     }
-
-    const boton = document.getElementById("btn-submit");
-
-    boton.textContent = "Confirmado!"
-
-    boton.style.backgroundColor = "red"
-
-    boton.disabled = true;
 
 }

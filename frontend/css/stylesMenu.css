@@ -1,170 +1,158 @@
- body {
-      background-image: url('../images/fondoMenu.jpg'); /* si querés una imagen */
+/* ============================================================
+   stylesMenu.css — Tema oscuro gaming (menú principal)
+   ------------------------------------------------------------
+   Aquí viven las variables de color del proyecto (:root).
+   login.html y register.html cargan este archivo ANTES que
+   styles.css para reutilizar la misma paleta (sin duplicarla).
+   ============================================================ */
+
+:root {
+    --bg-dark: #212020;      /* fondo de cards y formularios */
+    --bg-darker: #1a1a1a;    /* fondos aún más oscuros (borde de tabs) */
+    --text-light: #cccccc;   /* texto secundario */
+    --text-white: #ffffff;   /* texto principal / títulos */
+    --neon-blue: #00bfff;    /* acento neón azul */
+    --blue-base: #007bff;    /* azul base (gradientes) */
+    --accent-coral: #ff6f61; /* acento coral (títulos de cards) */
+    --border-color: #333333; /* bordes sutiles */
+}
+
+body {
+    background-image: url('../images/fondoMenu.jpg'); /* si querés una imagen */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    color: #cccccc;
-    }
-    .card {
-      background-color: #212020;
-      border: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    }
-    .card-title {
-      color: #ff6f61; /* Color moderno para títulos */
-    }
-    .card-text {
-      color: #cccccc;
-    }
-    .container {
-      padding-top: 40px;
-      padding-bottom: 40px;
-    }
+    color: var(--text-light);
+}
 
-    img{
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-    }
+.card {
+    background-color: var(--bg-dark);
+    /* Borde transparente del mismo ancho que .card-seleccionada:
+       al seleccionar solo cambia el color y no hay salto de layout. */
+    border: 2px solid transparent;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
 
-    .neon-blue-bg {
-    background: linear-gradient(90deg, #007bff, #00bfff);
-    box-shadow: 0 0 15px #00bfff;
-  }
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
 
-  .neon-blue-btn {
-    background: linear-gradient(90deg, #007bff, #00bfff);
+.card-title {
+    color: var(--accent-coral); /* Color moderno para títulos */
+}
+
+.card-text {
+    color: var(--text-light);
+}
+
+.container {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.neon-blue-bg {
+    background: linear-gradient(90deg, var(--blue-base), var(--neon-blue));
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+.neon-blue-btn {
+    background: linear-gradient(90deg, var(--blue-base), var(--neon-blue));
     border: none;
-    color: white;
+    color: var(--text-white);
     transition: all 0.3s ease-in-out;
-    box-shadow: 0 0 10px #00bfff;
-  }
+    box-shadow: 0 0 10px var(--neon-blue);
+}
 
-  .neon-blue-btn:hover {
-    background: linear-gradient(90deg, #00bfff, #007bff);
-    box-shadow: 0 0 20px #00bfff, 0 0 40px #00bfff;
+.neon-blue-btn:hover {
+    background: linear-gradient(90deg, var(--neon-blue), var(--blue-base));
+    box-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue);
     transform: scale(1.05);
-  }
+}
 
- .error {
+/* Cards de producto: reemplaza los estilos inline repetidos en menu.html */
+.card-producto {
+    width: 90%;
+    max-width: 300px;
+    margin: auto;
+}
 
-     background: linear-gradient(135deg, #ffdddd, #f8bcbc);
+/* Tabs estilo gaming: fondo oscuro, texto claro y activo con acento neón azul */
+.nav-tabs-gaming {
+    border-bottom: 2px solid var(--bg-darker);
+}
 
-     color: #7a1111;
+.nav-tabs-gaming .nav-link {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    margin-right: 4px;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s ease-in-out;
+}
 
-     padding: 16px 20px;
+.nav-tabs-gaming .nav-link:hover {
+    color: var(--text-white);
+    background-color: #2a2a2a; /* hover un tono más claro que --bg-dark */
+}
 
-     margin-top: 18px;
+.nav-tabs-gaming .nav-link.active {
+    background: linear-gradient(90deg, var(--blue-base), var(--neon-blue));
+    color: var(--text-white);
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+}
 
-     border-radius: 12px;
+/* ============================================================
+   FASE 4 — Micro-interacciones
+   ------------------------------------------------------------
+   - Animación de entrada (fadeInUp) con stagger por columna.
+   - Estado "card-seleccionada" (borde neón) al elegir componente.
+   ============================================================ */
 
-     font-size: 16px;
+/* Animación de entrada: fade-in + deslizamiento desde abajo */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-     font-weight: 600;
+/* Se usa fill-mode: backwards (NO both) para que, al terminar la
+   animación, la card vuelva a sus estilos normales y el transform
+   del :hover siga funcionando. Con "both" el keyframe final
+   (translateY(0)) quedaría congelado y pisaría el hover. */
+.card-producto {
+    animation: fadeInUp 0.5s ease backwards;
+}
 
-     border-left: 6px solid #d90429;
+/* Stagger: cada columna de la grilla aparece con un pequeño retraso.
+   Cada fila tiene 8 cards, así que 8 reglas alcanzan (0.05s → 0.40s).
+   Las cards de los tabs ocultos animan al abrir el tab. */
+.col:nth-child(1) .card-producto { animation-delay: 0.05s; }
+.col:nth-child(2) .card-producto { animation-delay: 0.10s; }
+.col:nth-child(3) .card-producto { animation-delay: 0.15s; }
+.col:nth-child(4) .card-producto { animation-delay: 0.20s; }
+.col:nth-child(5) .card-producto { animation-delay: 0.25s; }
+.col:nth-child(6) .card-producto { animation-delay: 0.30s; }
+.col:nth-child(7) .card-producto { animation-delay: 0.35s; }
+.col:nth-child(8) .card-producto { animation-delay: 0.40s; }
 
-     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-
-     animation: aparecer 0.3s ease;
-
- }
-
- .success {
-
-     background: linear-gradient(135deg, #d4edda, #b7e4c7);
-
-     color: #155724;
-
-     padding: 16px 20px;
-
-     margin-top: 18px;
-
-     border-radius: 12px;
-
-     font-size: 16px;
-
-     font-weight: 600;
-
-     border-left: 6px solid #28a745;
-
-     box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
-
-     display: flex;
-
-     align-items: center;
-
-     gap: 10px;
-
-     animation: aparecer 0.4s ease;
-
- }
-
- .warning {
-
-     background: linear-gradient(135deg, #fff3cd, #ffe0a3);
-
-     color: #7a5c00;
-
-     padding: 16px 20px;
-
-     margin-top: 18px;
-
-     border-radius: 12px;
-
-     font-size: 16px;
-
-     font-weight: 600;
-
-     border-left: 6px solid #ffc107;
-
-     box-shadow: 0 4px 12px rgba(255, 193, 7, 0.25);
-
-     display: flex;
-
-     align-items: center;
-
-     gap: 10px;
-
-     animation: aparecer 0.4s ease;
-
- }
-
- .mensaje-icono {
-
-     font-size: 20px;
-
-     font-weight: bold;
-
- }
-
- @keyframes aparecer {
-
-     from {
-
-         opacity: 0;
-
-         transform: translateY(-10px);
-
-     }
-
-     to {
-
-         opacity: 1;
-
-         transform: translateY(0);
-
-     }
-
- }
-
-    
-
-    
-
-    
-
+/* Card seleccionada: borde neón + glow. La doble clase (.card + .card-seleccionada)
+   gana en especificidad a .card:hover, así el glow neón se mantiene incluso
+   al pasar el mouse por encima de la card ya seleccionada. */
+.card.card-seleccionada {
+    border: 2px solid var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+}

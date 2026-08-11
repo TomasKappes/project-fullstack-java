@@ -1,35 +1,56 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="assets/icons/icono.png">
     <title>Espacio Gamer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/stylesMenu.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mensajes.css">
 </head>
-<body class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+<body class="d-flex flex-column" style="min-height: 100vh;">
 
-<main class="w-100" style="max-width: 400px;">
-    <form class="p-4 border rounded shadow-sm">
+<!-- Navbar mínima (solo branding) -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="login.html">
+            <img src="assets/icons/icono.png" alt="Espacio Gamer" width="32" height="32" class="d-inline-block align-text-top">
+            <span class="fw-bold">Espacio Gamer</span>
+        </a>
+    </div>
+</nav>
+
+<main class="flex-grow-1 d-flex align-items-center justify-content-center">
+    <form class="p-4 border rounded shadow-sm w-100" style="max-width: 400px;">
         <h1 class="h4 mb-3 text-center">Registrar usuario</h1>
 
         <div class="form-floating mb-2">
             <input type="text" class="form-control" id="username" placeholder="Luis">
-            <label>Nombre</label>
+            <label for="username">Nombre</label>
+            <div class="invalid-feedback">El nombre de usuario es obligatorio</div>
         </div>
 
         <div class="form-floating mb-2">
             <input type="email" class="form-control" id="email" placeholder="name@example.com">
             <label for="email">Email</label>
+            <div class="invalid-feedback">El email es obligatorio</div>
         </div>
 
         <div class="form-floating mb-3">
             <input type="password" class="form-control" id="password" placeholder="Password">
             <label for="password">Contraseña</label>
+            <div class="invalid-feedback">La contraseña es obligatoria</div>
         </div>
 
-        <button class="btn btn-primary w-100" type="submit">Registrar</button>
+        <button class="btn neon-blue-btn w-100" type="submit">Registrar</button>
+
+        <p class="text-center mt-3 mb-0">
+            ¿Ya tenés cuenta? <a href="login.html" class="link-info">Iniciá sesión</a>
+        </p>
+
         <div id="mensaje-ui"></div>
     </form>
 </main>
