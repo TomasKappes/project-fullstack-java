@@ -14,24 +14,16 @@
 </head>
 <body>
 
-  <!-- Navbar con branding, usuario y cierre de sesión -->
-  <nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="menu.html">
-        <img src="assets/icons/icono.png" alt="Espacio Gamer" width="32" height="32" class="d-inline-block align-text-top">
-        <span class="fw-bold">Espacio Gamer</span>
-      </a>
-      <div class="d-flex align-items-center gap-3">
-        <span class="navbar-text text-white">
-          <i class="bi bi-person-circle me-1"></i>
-          <span id="navbar-username">Usuario</span>
-        </span>
-        <button type="button" id="btn-logout" class="btn btn-outline-light btn-sm">
-          <i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión
-        </button>
-      </div>
-    </div>
-  </nav>
+  <!-- Badge flotante: usuario + cierre de sesión (no ocupa espacio en el flujo) -->
+  <div class="user-float">
+    <span class="navbar-text text-white">
+      <i class="bi bi-person-circle me-1"></i>
+      <span id="navbar-username">Usuario</span>
+    </span>
+    <button type="button" id="btn-logout" class="btn btn-outline-light btn-sm" title="Cerrar sesión">
+      <i class="bi bi-box-arrow-right"></i>
+    </button>
+  </div>
 
   <div class="container mt-4">
 
@@ -812,7 +804,7 @@
                 </div>
 
                 <div class="col-12 text-center">
-                    <button type="submit" id="btn-submit" class="btn btn-primary btn-lg px-5 shadow-sm">Presupuestar</button>
+                    <button type="submit" id="btn-submit" class="btn btn-primary btn-lg px-5 shadow-sm">Verificar componentes</button>
                 </div>
 
                 <div id="mensaje-usuario" class="mt-3 text-center text-success fw-bold fs-4"></div>

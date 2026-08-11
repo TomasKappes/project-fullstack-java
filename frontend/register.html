@@ -11,19 +11,14 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/mensajes.css">
 </head>
-<body class="d-flex flex-column" style="min-height: 100vh;">
+<body class="d-flex align-items-center justify-content-center" style="height: 100vh;">
 
-<!-- Navbar mínima (solo branding) -->
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="login.html">
-            <img src="assets/icons/icono.png" alt="Espacio Gamer" width="32" height="32" class="d-inline-block align-text-top">
-            <span class="fw-bold">Espacio Gamer</span>
-        </a>
-    </div>
-</nav>
+<!-- Logo flotante pequeño (no ocupa espacio en el flujo) -->
+<a href="login.html" class="brand-float" title="Espacio Gamer">
+    <img src="assets/icons/icono.png" alt="Espacio Gamer" width="36" height="36">
+</a>
 
-<main class="flex-grow-1 d-flex align-items-center justify-content-center">
+<main class="w-100" style="max-width: 400px;">
     <form class="p-4 border rounded shadow-sm w-100" style="max-width: 400px;">
         <h1 class="h4 mb-3 text-center">Registrar usuario</h1>
 

@@ -18,6 +18,22 @@ body {
     --bs-body-bg: var(--bg-dark);
 }
 
+/* Logo flotante en la esquina superior izquierda.
+   position: fixed => no ocupa espacio en el flujo, no corta el fondo. */
+.brand-float {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1030;
+    opacity: 0.85;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.brand-float:hover {
+    opacity: 1;
+    transform: scale(1.08);
+}
+
 form {
     background-color: rgba(33, 32, 32, 0.85); /* var(--bg-dark) al 85% */
     padding: 2rem;
