@@ -52,7 +52,7 @@ frontend/         Static HTML/CSS/JS (vanilla, no framework)
 - **JWT secret key**: In `application.properties` as plaintext (`security.jwt.secret-key=myverysecuresecretkeyforjwttokens123`). Not production-safe. `JwtService` uses `secretKey.getBytes()` + `parserBuilder()` (deprecated in jjwt 0.12+).
 - **Known tech debt — `confirmarPedido` race condition**: The `if (estado == CONFIRMADO)` guard protects sequential calls but NOT concurrent ones (two parallel requests can both read `PRESUPUESTADO` and double-deduct stock — TOCTOU). No `@Version`/`@Lock` exists. **Accepted as technical debt for the MVP by decision (2026-08-08)** — do NOT "fix" silently; the decision log lives in `ESTRATEGIA_DE_TESTING.md` §8.4.
 - **Database**: MySQL on `localhost:3306/projectdb` with `ddl-auto=create-drop` — all data resets on restart. App must be running before frontend can log in.
-- **menu.html has hardcoded product data** — it does not fetch from the API (`GET /productos` is implemented but unused by frontend). **Accepted as technical debt for the MVP by decision (2026-08-10)** — the `data-id` 1–39 depend on `DataSeeder` insertion order; do NOT "fix" silently; the decision log lives in `ESTRATEGIA_DE_TESTING.md` §8.4 (debt #5).
+- **menu.html has hardcoded product data** — it does not fetch from the API (`GET /productos` is implemented but unused by frontend). **Accepted as technical debt for the MVP by decision (2026-08-10)** — the `data-id` 1–40 depend on `DataSeeder` insertion order; do NOT "fix" silently; the decision log lives in `ESTRATEGIA_DE_TESTING.md` §8.4 (debt #5).
 
 ## Testing
 
